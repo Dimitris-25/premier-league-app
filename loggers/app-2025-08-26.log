@@ -1,0 +1,24 @@
+{
+  message: 'GET /',
+  level: 'info',
+  label: 'Premier League Api',
+  timestamp: '2025-08-26 12:13:40'
+}
+{
+  message: 'Root endpoint hit!',
+  level: 'debug',
+  label: 'Premier League Api',
+  timestamp: '2025-08-26 12:13:40'
+}
+{
+  message: 'GET /favicon.ico',
+  level: 'info',
+  label: 'Premier League Api',
+  timestamp: '2025-08-26 12:13:40'
+}
+{
+  message: 'GET /db-test',
+  level: 'info',
+  label: 'Premier League Api',
+  timestamp: '2025-08-26 12:13:52'
+}
