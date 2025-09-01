@@ -1,9 +1,13 @@
 const express = require('express');
-const pool = require("./db"); 
 const app = express()
-const testRoutes = require("./routes/test_routes");
+const testRoutes = require("./routes/testRoutes");
 const logger = require('./logger'); 
 const teamRoutes = require("./routes/teamRoutes");  
+const venueRoutes = require("./routes/venueRoutes");
+const teamsStatsRoutes = require("./routes/teamsStatsRoutes");
+const teamFormRoutes = require("./routes/teamFormRoutes");
+
+
 
 
 app.use(express.json());
@@ -19,7 +23,13 @@ app.get('/', (req, res) => {
 });
 
 app.use("/api", testRoutes)
-app.use("/api", teamRoutes);
+app.use("/api/teams", teamRoutes);
+app.use("/api/venues", venueRoutes);
+app.use("/api/teamsStats", teamsStatsRoutes)
+app.use("/api/teamForm", teamFormRoutes);
+
+
+
 
 module.exports = app;
 
