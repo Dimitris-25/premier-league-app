@@ -33,4 +33,40 @@ async function getAllTeamsFromDB() {
   return rows;
 }
 
-module.exports = { insertTeam, getAllTeamsFromDB };
+// 📌 Read by team_id
+async function getTeamById(team_id) {
+  const [rows] = await pool.query("SELECT * FROM teams WHERE team_id = ?", [team_id]);
+  return rows[0];
+}
+
+// 📌 Update
+async function updateTeam(team_id, team, venue) {
+  await pool.query(
+    `UPDATE teams 
+     SET name = ?, code = ?, country = ?, founded = ?, logo = ?, venue_id = ?
+     WHERE team_id = ?`,
+    [
+      team.name || null,
+      team.code || null,
+      team.country || null,
+      team.founded || null,
+      team.logo || null,
+      venue?.id || null,
+      team_id,
+    ]
+  );
+}
+
+// 📌 Delete
+async function deleteTeam(team_id) {
+  await pool.query("DELETE FROM teams WHERE team_id = ?", [team_id]);
+}
+
+
+module.exports = {
+  insertTeam,
+  getAllTeamsFromDB,
+  getTeamById,
+  updateTeam,
+  deleteTeam,
+};

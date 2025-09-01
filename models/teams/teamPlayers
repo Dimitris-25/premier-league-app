@@ -1,0 +1,84 @@
+const pool = require("../../config/db");
+
+
+async function insertTeamPlayer(player) {
+  try {
+    await pool.query(
+      `INSERT INTO team_players 
+        (team_id, player_id, season, position, number, captain) 
+       VALUES (?, ?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE
+          position = VALUES(position),
+          number = VALUES(number),
+          captain = VALUES(captain)`,
+      [
+        player.team_id,
+        player.player_id,
+        player.season,
+        player.position || null,
+        player.number || null,
+        player.captain || 0
+      ]
+    );
+  } catch (err) {
+    console.error("❌ Error inserting player:", err);
+    throw err;
+  }
+}
+
+
+
+// 📌 Create (Insert new record)
+const createTeamPlayer = (teamPlayer, callback) => {
+  const { team_id, player_id, season, position, number, captain } = teamPlayer;
+  const sql = `
+    INSERT INTO team_players (team_id, player_id, season, position, number, captain)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+  db.query(sql, [team_id, player_id, season, position, number, captain], callback);
+};
+
+// 📌 Read All
+const getAllTeamPlayers = (callback) => {
+  const sql = "SELECT * FROM team_players";
+  db.query(sql, callback);
+};
+
+// 📌 Read by ID
+const getTeamPlayerById = (id, callback) => {
+  const sql = "SELECT * FROM team_players WHERE id = ?";
+  db.query(sql, [id], callback);
+};
+
+// 📌 Read by Team
+const getPlayersByTeam = (team_id, season, callback) => {
+  const sql = "SELECT * FROM team_players WHERE team_id = ? AND season = ?";
+  db.query(sql, [team_id, season], callback);
+};
+
+// 📌 Update
+const updateTeamPlayer = (id, teamPlayer, callback) => {
+  const { position, number, captain } = teamPlayer;
+  const sql = `
+    UPDATE team_players 
+    SET position = ?, number = ?, captain = ?
+    WHERE id = ?
+  `;
+  db.query(sql, [position, number, captain, id], callback);
+};
+
+// 📌 Delete
+const deleteTeamPlayer = (id, callback) => {
+  const sql = "DELETE FROM team_players WHERE id = ?";
+  db.query(sql, [id], callback);
+};
+
+module.exports = {
+  insertTeamPlayer,
+  createTeamPlayer,
+  getAllTeamPlayers,
+  getTeamPlayerById,
+  getPlayersByTeam,
+  updateTeamPlayer,
+  deleteTeamPlayer,
+};
