@@ -1,0 +1,15 @@
+const express = require("express");
+const { fetchAndSaveVenues, getAllVenues } = require("../controllers/teams/venuesController");
+
+
+const router = express.Router();
+
+// Import venues from API (placeholder)
+router.get("/import", fetchAndSaveVenues);
+
+// All the Venues from db
+router.get("/", getAllVenues);
+
+module.exports = router;
+
+console.log("✅ venueRoutes loaded");
