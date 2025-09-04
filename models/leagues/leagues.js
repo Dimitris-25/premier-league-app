@@ -13,6 +13,7 @@ async function insertLeague(league) {
       logo = VALUES(logo),
       flag = VALUES(flag)
   `;
+
   const values = [
     league.league_id,
     league.name,
@@ -21,20 +22,21 @@ async function insertLeague(league) {
     league.logo,
     league.flag,
   ];
+
   await pool.query(sql, values);
 }
 
 // 📖 Get all leagues
 async function getAllLeagues() {
-  const [rows] = await pool.query("SELECT * FROM leagues");
+  const sql = "SELECT * FROM leagues";
+  const [rows] = await pool.query(sql);
   return rows;
 }
 
 // 📖 Get league by ID
 async function getLeagueById(id) {
-  const [rows] = await pool.query("SELECT * FROM leagues WHERE league_id = ?", [
-    id,
-  ]);
+  const sql = "SELECT * FROM leagues WHERE league_id = ?";
+  const [rows] = await pool.query(sql, [id]);
   return rows[0];
 }
 
@@ -43,6 +45,7 @@ async function updateLeague(id, updates) {
   const fields = Object.keys(updates)
     .map((key) => `${key} = ?`)
     .join(", ");
+
   const values = Object.values(updates);
   values.push(id);
 
@@ -52,7 +55,8 @@ async function updateLeague(id, updates) {
 
 // 🗑️ Delete league
 async function deleteLeague(id) {
-  await pool.query("DELETE FROM leagues WHERE league_id = ?", [id]);
+  const sql = "DELETE FROM leagues WHERE league_id = ?";
+  await pool.query(sql, [id]);
 }
 
 module.exports = {
