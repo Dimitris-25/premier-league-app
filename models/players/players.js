@@ -1,7 +1,7 @@
-// models/players.js
+// models/players/players.js
 const pool = require("../../config/db");
 
-// Create or update a player
+// ➕ Create or update a player
 async function insertPlayer(player) {
   const sql = `
     INSERT INTO players 
@@ -35,19 +35,21 @@ async function insertPlayer(player) {
   await pool.query(sql, values);
 }
 
-// Read all players
+// 📖 Read all players
 async function getAllPlayers() {
-  const [rows] = await pool.query("SELECT * FROM players");
+  const sql = "SELECT * FROM players";
+  const [rows] = await pool.query(sql);
   return rows;
 }
 
-// Read one player by ID
+// 📖 Read one player by ID
 async function getPlayerById(id) {
-  const [rows] = await pool.query("SELECT * FROM players WHERE player_id = ?", [id]);
+  const sql = "SELECT * FROM players WHERE player_id = ?";
+  const [rows] = await pool.query(sql, [id]);
   return rows[0];
 }
 
-// Update player
+// ✏️ Update player
 async function updatePlayer(id, updates) {
   const sql = `
     UPDATE players SET 
@@ -72,9 +74,10 @@ async function updatePlayer(id, updates) {
   await pool.query(sql, values);
 }
 
-// Delete player
+// 🗑️ Delete player
 async function deletePlayer(id) {
-  await pool.query("DELETE FROM players WHERE player_id = ?", [id]);
+  const sql = "DELETE FROM players WHERE player_id = ?";
+  await pool.query(sql, [id]);
 }
 
 module.exports = {
