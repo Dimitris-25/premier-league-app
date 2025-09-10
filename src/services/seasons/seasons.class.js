@@ -1,7 +1,7 @@
-// src/services/countries/countries.class.js
+// src/services/seasons/seasons.class.js
 const axios = require("axios");
 
-class CountriesService {
+class SeasonsService {
   constructor(options) {
     this.options = options;
     this.Model = options.Model;
@@ -9,7 +9,7 @@ class CountriesService {
     this.id = options.id;
   }
 
-  // Standard CRUD (Feathers καλεί αυτόματα)
+  // Standard CRUD
   async find(params) {
     return this.Model(this.table).select("*");
   }
@@ -39,9 +39,11 @@ class CountriesService {
     if (!API_KEY) throw new Error("API_KEY is not set");
 
     const { data } = await axios.get(
-      "https://v3.football.api-sports.io/countries",
+      "https://v3.football.api-sports.io/leagues/seasons",
       {
-        headers: { "x-apisports-key": API_KEY },
+        headers: {
+          "x-apisports-key": API_KEY,
+        },
       }
     );
 
@@ -49,20 +51,15 @@ class CountriesService {
     let created = 0,
       updated = 0;
 
-    for (const it of items) {
-      const code = it?.code ? String(it.code).trim().slice(0, 10) : null;
-      const name = (it?.name || "").trim();
-      const flag = it?.flag || null;
+    for (const year of items) {
+      if (!year) continue;
 
-      if (!code || !name) continue;
-
-      const existing = await this.Model(this.table).where("code", code).first();
+      const existing = await this.Model(this.table).where({ year }).first();
 
       if (existing) {
-        await this.Model(this.table).where("code", code).update({ name, flag });
         updated++;
       } else {
-        await this.Model(this.table).insert({ code, name, flag });
+        await this.Model(this.table).insert({ year });
         created++;
       }
     }
@@ -76,4 +73,4 @@ class CountriesService {
   }
 }
 
-module.exports = { CountriesService };
+module.exports = { SeasonsService };

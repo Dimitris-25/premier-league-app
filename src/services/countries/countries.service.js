@@ -1,18 +1,26 @@
+// src/services/countries/countries.service.js
 const { CountriesService } = require("./countries.class");
 
 module.exports = function (app) {
   const knex = app.get("knex");
 
   const options = {
-    // Feathers Knex adapter expects `Model` to be the initialized knex instance
     Model: knex,
-    // MySQL table name
     name: "countries",
-    // Primary key column
     id: "country_id",
-    // Optional: allow multi create/patch/remove if you want later
-    // multi: ['create', 'patch', 'remove']
+    multi: ["create", "patch", "remove"],
   };
 
+  // Register Feathers CRUD service
   app.use("/countries", new CountriesService(options));
+
+  // Custom endpoint for refresh
+  app.get("/countries/refresh", async (req, res, next) => {
+    try {
+      const result = await app.service("countries").fetchFromApi();
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  });
 };

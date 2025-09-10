@@ -1,7 +1,6 @@
-// src/services/countries/countries.class.js
 const axios = require("axios");
 
-class CountriesService {
+class CitiesService {
   constructor(options) {
     this.options = options;
     this.Model = options.Model;
@@ -9,7 +8,7 @@ class CountriesService {
     this.id = options.id;
   }
 
-  // Standard CRUD (Feathers καλεί αυτόματα)
+  // Standard CRUD (Feathers auto call)
   async find(params) {
     return this.Model(this.table).select("*");
   }
@@ -33,14 +32,18 @@ class CountriesService {
     return { id };
   }
 
-  // 🔹 Custom method: fetch from API-Football
+  // 🔹 Custom method: fetch cities from API-Football
+  // Note: There is no dedicated endpoint for cities,
+  // so we derive them from venues data.
   async fetchFromApi() {
     const { API_KEY } = process.env;
     if (!API_KEY) throw new Error("API_KEY is not set");
 
+    // Example: fetch venues from API-Football
     const { data } = await axios.get(
-      "https://v3.football.api-sports.io/countries",
+      "https://v3.football.api-sports.io/venues",
       {
+        params: { country: "England" }, // optional filter
         headers: { "x-apisports-key": API_KEY },
       }
     );
@@ -50,19 +53,33 @@ class CountriesService {
       updated = 0;
 
     for (const it of items) {
-      const code = it?.code ? String(it.code).trim().slice(0, 10) : null;
-      const name = (it?.name || "").trim();
-      const flag = it?.flag || null;
+      const cityName = it.city || null;
+      if (!cityName) continue;
 
-      if (!code || !name) continue;
+      // ---- Country lookup (FK)
+      let countryId = null;
+      if (it.country) {
+        const country = await this.Model("countries")
+          .where({ name: it.country })
+          .first();
+        if (country) countryId = country.country_id;
+      }
 
-      const existing = await this.Model(this.table).where("code", code).first();
+      // ---- Insert or Update city
+      const existing = await this.Model(this.table)
+        .where({ name: cityName, country_id: countryId })
+        .first();
 
       if (existing) {
-        await this.Model(this.table).where("code", code).update({ name, flag });
+        await this.Model(this.table)
+          .where({ city_id: existing.city_id })
+          .update({ name: cityName, country_id: countryId });
         updated++;
       } else {
-        await this.Model(this.table).insert({ code, name, flag });
+        await this.Model(this.table).insert({
+          name: cityName,
+          country_id: countryId,
+        });
         created++;
       }
     }
@@ -76,4 +93,4 @@ class CountriesService {
   }
 }
 
-module.exports = { CountriesService };
+module.exports = { CitiesService };
