@@ -8,9 +8,11 @@
     "seed": "knex seed:run --knexfile knexfile.js"
   },
   "dependencies": {
+    "@feathersjs/adapter-commons": "^5.0.34",
     "@feathersjs/authentication": "^5.0.34",
     "@feathersjs/authentication-local": "^5.0.34",
     "@feathersjs/authentication-oauth": "^5.0.34",
+    "@feathersjs/errors": "^5.0.34",
     "@feathersjs/express": "^5.0.34",
     "@feathersjs/feathers": "^5.0.34",
     "@feathersjs/knex": "^5.0.34",
@@ -24,6 +26,7 @@
     "express-rate-limit": "^8.1.0",
     "helmet": "^8.1.0",
     "ioredis": "^5.7.0",
+    "jsonrepair": "^3.13.0",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "lodash": "^4.17.21",
