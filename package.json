@@ -2,10 +2,14 @@
   "name": "premier-league-app",
   "version": "1.0.0",
   "scripts": {
+    "start": "node server.js",
     "dev": "nodemon server.js",
-    "migrate": "knex migrate:latest --knexfile knexfile.js",
-    "rollback": "knex migrate:rollback --knexfile knexfile.js",
-    "seed": "knex seed:run --knexfile knexfile.js"
+    "migrate": "knex migrate:latest",
+    "migrate:up": "knex migrate:up",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "extract-fixtures": "node scripts/fetchFixturesIds.js",
+    "db:reset": "node scripts/reset-db.js"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.34",
@@ -18,9 +22,12 @@
     "@feathersjs/knex": "^5.0.34",
     "@feathersjs/schema": "^5.0.34",
     "axios": "^1.11.0",
+    "axios-retry": "^4.5.0",
     "bcryptjs": "^3.0.2",
+    "bottleneck": "^2.19.5",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.2",
     "express-rate-limit": "^8.1.0",
@@ -46,5 +53,18 @@
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "supertest": "^7.1.4"
-  }
+  },
+  "description": "FeathersJS + Knex + MySQL project for Premier League 2025 data  \r (using API-Football).",
+  "main": "knexfile.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dimitris-25/premier-league-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dimitris-25/premier-league-app/issues"
+  },
+  "homepage": "https://github.com/Dimitris-25/premier-league-app#readme"
 }
