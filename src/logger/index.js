@@ -3,6 +3,10 @@
 const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
 const path = require("path");
+const only = process.env.SERVICE_ONLY;
+const reg = (name, fn) => {
+  if (!only || only === name) app.configure(fn);
+};
 
 // Define log format with timestamp, level and message
 const logFormat = format.combine(
