@@ -1,0 +1,758 @@
+[
+  {
+    "fixture_id": 1378969,
+    "team_id": 35,
+    "player_id": 18870,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378969,
+    "team_id": 40,
+    "player_id": 206254,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378969,
+    "team_id": 35,
+    "player_id": 152856,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378970,
+    "team_id": 34,
+    "player_id": 723,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378970,
+    "team_id": 66,
+    "player_id": 1904,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378970,
+    "team_id": 66,
+    "player_id": 19354,
+    "type": "Card",
+    "detail": "Red Card"
+  },
+  {
+    "fixture_id": 1378971,
+    "team_id": 36,
+    "player_id": 152967,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378971,
+    "team_id": 51,
+    "player_id": 106835,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378971,
+    "team_id": 51,
+    "player_id": 1361,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378971,
+    "team_id": 51,
+    "player_id": 278370,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378971,
+    "team_id": 36,
+    "player_id": 19025,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378971,
+    "team_id": 36,
+    "player_id": 195106,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378973,
+    "team_id": 48,
+    "player_id": 18744,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378975,
+    "team_id": 50,
+    "player_id": 36902,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378975,
+    "team_id": 39,
+    "player_id": 18742,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378975,
+    "team_id": 50,
+    "player_id": 307123,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378976,
+    "team_id": 49,
+    "player_id": 19545,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378976,
+    "team_id": 52,
+    "player_id": 13736,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378976,
+    "team_id": 52,
+    "player_id": 25927,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378976,
+    "team_id": 52,
+    "player_id": 18806,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378976,
+    "team_id": 49,
+    "player_id": 425733,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378972,
+    "team_id": 55,
+    "player_id": 19495,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378972,
+    "team_id": 65,
+    "player_id": 138780,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378972,
+    "team_id": 55,
+    "player_id": 44871,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378977,
+    "team_id": 42,
+    "player_id": 157052,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378977,
+    "team_id": 33,
+    "player_id": 382452,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378977,
+    "team_id": 42,
+    "player_id": 19465,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378977,
+    "team_id": 42,
+    "player_id": 313245,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378977,
+    "team_id": 42,
+    "player_id": 38746,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378978,
+    "team_id": 45,
+    "player_id": 284500,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378978,
+    "team_id": 45,
+    "player_id": 195993,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378988,
+    "team_id": 49,
+    "player_id": 341642,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378986,
+    "team_id": 47,
+    "player_id": 129711,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378986,
+    "team_id": 47,
+    "player_id": 30776,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378986,
+    "team_id": 50,
+    "player_id": 161933,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378986,
+    "team_id": 47,
+    "player_id": 2413,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378986,
+    "team_id": 47,
+    "player_id": 47519,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378980,
+    "team_id": 39,
+    "player_id": 41606,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378980,
+    "team_id": 39,
+    "player_id": 41606,
+    "type": "Card",
+    "detail": "Red Card"
+  },
+  {
+    "fixture_id": 1378980,
+    "team_id": 35,
+    "player_id": 1150,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378980,
+    "team_id": 39,
+    "player_id": 280687,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378980,
+    "team_id": 35,
+    "player_id": 304853,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378980,
+    "team_id": 39,
+    "player_id": 18742,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378980,
+    "team_id": 39,
+    "player_id": 195103,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378982,
+    "team_id": 746,
+    "player_id": 301771,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378981,
+    "team_id": 55,
+    "player_id": 281,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378981,
+    "team_id": 66,
+    "player_id": 162714,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378981,
+    "team_id": 66,
+    "player_id": 284457,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378979,
+    "team_id": 63,
+    "player_id": 19201,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378979,
+    "team_id": 63,
+    "player_id": 47969,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378984,
+    "team_id": 51,
+    "player_id": 162007,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378984,
+    "team_id": 45,
+    "player_id": 284500,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378984,
+    "team_id": 51,
+    "player_id": 92993,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378984,
+    "team_id": 45,
+    "player_id": 895,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378984,
+    "team_id": 45,
+    "player_id": 148099,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378984,
+    "team_id": 45,
+    "player_id": 125743,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378984,
+    "team_id": 51,
+    "player_id": 1361,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378983,
+    "team_id": 52,
+    "player_id": 20995,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378983,
+    "team_id": 65,
+    "player_id": 2919,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378983,
+    "team_id": 52,
+    "player_id": 182201,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378983,
+    "team_id": 65,
+    "player_id": 2771,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378983,
+    "team_id": 52,
+    "player_id": 18806,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378983,
+    "team_id": 65,
+    "player_id": 363695,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378985,
+    "team_id": 33,
+    "player_id": 747,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378985,
+    "team_id": 36,
+    "player_id": 2823,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378987,
+    "team_id": 40,
+    "player_id": 542,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378987,
+    "team_id": 40,
+    "player_id": 1145,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378987,
+    "team_id": 34,
+    "player_id": 18961,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378987,
+    "team_id": 34,
+    "player_id": 138787,
+    "type": "Card",
+    "detail": "Red Card"
+  },
+  {
+    "fixture_id": 1378987,
+    "team_id": 34,
+    "player_id": 10135,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378987,
+    "team_id": 40,
+    "player_id": 180317,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378991,
+    "team_id": 49,
+    "player_id": 116117,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378991,
+    "team_id": 36,
+    "player_id": 1455,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378991,
+    "team_id": 36,
+    "player_id": 2823,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378991,
+    "team_id": 49,
+    "player_id": 305834,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378994,
+    "team_id": 33,
+    "player_id": 1485,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378994,
+    "team_id": 44,
+    "player_id": 161621,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378994,
+    "team_id": 44,
+    "player_id": 196855,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378994,
+    "team_id": 44,
+    "player_id": 98936,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378994,
+    "team_id": 44,
+    "player_id": 20303,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378994,
+    "team_id": 44,
+    "player_id": 627,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378998,
+    "team_id": 45,
+    "player_id": 148099,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378997,
+    "team_id": 35,
+    "player_id": 19281,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378997,
+    "team_id": 47,
+    "player_id": 152849,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378997,
+    "team_id": 47,
+    "player_id": 19235,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378997,
+    "team_id": 35,
+    "player_id": 118307,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378997,
+    "team_id": 35,
+    "player_id": 1150,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378997,
+    "team_id": 35,
+    "player_id": 20093,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378996,
+    "team_id": 746,
+    "player_id": 22225,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378996,
+    "team_id": 746,
+    "player_id": 327631,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378996,
+    "team_id": 55,
+    "player_id": 196156,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378996,
+    "team_id": 55,
+    "player_id": 19346,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378996,
+    "team_id": 746,
+    "player_id": 1464,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378992,
+    "team_id": 34,
+    "player_id": 18911,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378992,
+    "team_id": 63,
+    "player_id": 162128,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378990,
+    "team_id": 51,
+    "player_id": 38695,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378990,
+    "team_id": 50,
+    "player_id": 360114,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378990,
+    "team_id": 50,
+    "player_id": 21138,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378990,
+    "team_id": 51,
+    "player_id": 537,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378993,
+    "team_id": 40,
+    "player_id": 542,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378993,
+    "team_id": 42,
+    "player_id": 18979,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378993,
+    "team_id": 42,
+    "player_id": 47315,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378993,
+    "team_id": 40,
+    "player_id": 8500,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378989,
+    "team_id": 66,
+    "player_id": 19298,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378989,
+    "team_id": 66,
+    "player_id": 36878,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378989,
+    "team_id": 52,
+    "player_id": 25927,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378989,
+    "team_id": 52,
+    "player_id": 18806,
+    "type": "Card",
+    "detail": "Yellow Card"
+  },
+  {
+    "fixture_id": 1378989,
+    "team_id": 52,
+    "player_id": 2218,
+    "type": "Card",
+    "detail": "Yellow Card"
+  }
+]
