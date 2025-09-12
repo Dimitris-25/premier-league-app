@@ -1,3 +1,5 @@
+//  Migration cities.js
+
 exports.up = async function (knex) {
   await knex.schema.createTable("cities", (table) => {
     // Primary key
@@ -8,19 +10,19 @@ exports.up = async function (knex) {
 
     // Foreign key to countries
     table
-      .integer("country_id")
-      .unsigned()
-      .nullable()
-      .references("country_id")
+      .string("country_code", 10)
+      .notNullable()
+      .references("code")
       .inTable("countries")
       .onUpdate("CASCADE")
-      .onDelete("SET NULL")
-      .comment("FK to countries");
+      .onDelete("RESTRICT")
+      .comment("FK to countries by code (e.g., GR, ENG)");
 
     // Unique constraint (name + country)
-    table.unique(["name", "country_id"], {
-      indexName: "uq_cities_name_country",
-    });
+    table.unique(["name", "country_code"], "uq_cities_name_country");
+
+    // Helpful index for joins/filters
+    table.index(["country_code"], "idx_cities_country_code");
   });
 };
 

@@ -1,11 +1,14 @@
+// Migration venues.js
+
 exports.up = async function (knex) {
   await knex.schema.createTable("venues", (table) => {
     // Primary key
-    table.increments("venue_id").primary().comment("Primary key");
+    table.increments("venue_id").unsigned().primary().comment("Primary key");
 
     // API ID
     table
       .integer("api_venue_id")
+      .unsigned()
       .notNullable()
       .unique()
       .comment("Venue ID from API-Football");
@@ -43,6 +46,11 @@ exports.up = async function (knex) {
     table.unique(["name", "city_id", "country_id"], {
       indexName: "uq_venues_name_city_country",
     });
+    // Indexes
+    table.index(["api_venue_id"], "idx_venues_api_venue_id");
+    table.index(["name"], "idx_venues_name");
+    table.index(["city_id"], "idx_venues_city");
+    table.index(["country_id"], "idx_venues_country");
   });
 };
 

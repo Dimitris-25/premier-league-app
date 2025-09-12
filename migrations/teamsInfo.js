@@ -1,11 +1,21 @@
+// migrations/teamsInfo.js
+
 exports.up = async function (knex) {
   await knex.schema.createTable("teamsInfo", (table) => {
-    // Primary key (το id από το API)
-    table.integer("team_id").primary().comment("Team ID from API-Football");
+    // Primary key (internal)
+    table.increments("team_id").unsigned().primary().comment("Primary key");
 
-    // Βασικά πεδία
+    // External/API identity
+    table
+      .integer("api_team_id")
+      .unsigned()
+      .notNullable()
+      .unique()
+      .comment("Team ID from API-Football");
+
+    // Basic columns
     table.string("name", 100).notNullable().comment("Team name");
-    table.string("code", 10).nullable().comment("Team code");
+    table.string("code", 10).nullable().comment("Short team code");
     table.integer("founded").nullable().comment("Year founded");
     table.string("logo", 255).nullable().comment("Team logo URL");
 
@@ -17,7 +27,8 @@ exports.up = async function (knex) {
       .references("venue_id")
       .inTable("venues")
       .onUpdate("CASCADE")
-      .onDelete("SET NULL");
+      .onDelete("SET NULL")
+      .comment("FK to venues");
 
     // FK -> countries
     table
@@ -27,16 +38,22 @@ exports.up = async function (knex) {
       .references("country_id")
       .inTable("countries")
       .onUpdate("CASCADE")
-      .onDelete("SET NULL");
+      .onDelete("SET NULL")
+      .comment("FK to countries");
 
-    // Unique constraint (name + country_id)
+    // Uniques
     table.unique(["name", "country_id"], {
       indexName: "uq_teamsInfo_name_country",
     });
+
+    // Indexes
+    table.index(["api_team_id"], "idx_teamsInfo_api_team_id");
+    table.index(["country_id"], "idx_teamsInfo_country");
+    table.index(["venue_id"], "idx_teamsInfo_venue");
+    table.index(["name"], "idx_teamsInfo_name");
   });
 };
 
 exports.down = async function (knex) {
-  // Ρίχνει μόνο το teamsInfo
   await knex.schema.dropTableIfExists("teamsInfo");
 };

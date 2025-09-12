@@ -1,7 +1,9 @@
+//  Migration leagues.js
+
 exports.up = async function (knex) {
   await knex.schema.createTable("leagues", (table) => {
     // Primary key
-    table.increments("league_id").primary().comment("Primary key");
+    table.increments("league_id").unsigned().primary().comment("Primary key");
 
     // Basic columns
     table.string("name", 100).notNullable().comment("League name");
@@ -10,6 +12,7 @@ exports.up = async function (knex) {
 
     table
       .integer("api_league_id")
+      .unsigned()
       .notNullable()
       .unique()
       .comment("League ID from API-Football");
