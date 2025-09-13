@@ -1,4 +1,4 @@
-const { PlayersProfiles } = require("./playersProfiles.class"); // ✅ ίδιος φάκελος, ΟΧΙ ../
+const { PlayersProfiles } = require("./playersProfiles.class");
 const hooks = require("./hooks");
 
 module.exports = function (app) {
