@@ -14,3 +14,9 @@ logs/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Exclude all scripts
+/scripts/
+
+# exclude files
+/files/
