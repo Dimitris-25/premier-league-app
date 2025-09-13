@@ -40,12 +40,8 @@ class LeaguesService {
     const { data } = await axios.get(
       "https://v3.football.api-sports.io/leagues",
       {
-        params: {
-          name: "Premier League", // ✅ μόνο αυτό κρατάμε
-        },
-        headers: {
-          "x-apisports-key": API_KEY,
-        },
+        params: { name: "Premier League" }, // ✅ μόνο αυτό κρατάμε
+        headers: { "x-apisports-key": API_KEY },
       }
     );
 
@@ -58,7 +54,6 @@ class LeaguesService {
       const name = (it.league?.name || "").trim();
       const type = it.league?.type || null;
       const logo = it.league?.logo || null;
-
       if (!apiLeagueId || !name) continue;
 
       // ---- Country lookup (FK)
@@ -70,28 +65,35 @@ class LeaguesService {
         if (country) countryId = country.country_id;
       }
 
-      // ---- Season lookup (FK)
+      // ---- Season lookup (FK)  ✅ διορθωμένο
       let seasonId = null;
       if (Array.isArray(it.seasons) && it.seasons.length > 0) {
-        const s = it.seasons[0]; // get the first/current season
-        const season = await this.Model("seasons")
-          .where({ year: s.year })
-          .first();
+        // πάρε προτεραιότητα το current, αλλιώς το πιο πρόσφατο year
+        const seasonsArr = it.seasons;
+        const s =
+          seasonsArr.find((x) => x?.current) ||
+          seasonsArr.slice().sort((a, b) => (b?.year ?? 0) - (a?.year ?? 0))[0];
 
-        if (season) {
-          seasonId = season.season_id;
-        } else {
-          const [newId] = await this.Model("seasons").insert({
-            year: s.year,
-            start: s.start,
-            end: s.end,
-            current: s.current,
-          });
-          seasonId = newId;
+        if (s && Number.isInteger(s.year)) {
+          const season = await this.Model("seasons")
+            .where({ season_year: s.year }) // 🔸 season_year
+            .first();
+
+          if (season) {
+            seasonId = season.season_id;
+          } else {
+            const [newId] = await this.Model("seasons").insert({
+              season_year: s.year, // 🔸 season_year
+              start: s.start ?? null,
+              end: s.end ?? null,
+              current: s.current ? 1 : 0,
+            });
+            seasonId = newId;
+          }
         }
       }
 
-      // ---- Insert / Update league
+      // ---- Insert / Update league (γράφουμε season_id)
       const existing = await this.Model(this.table)
         .where({ api_league_id: apiLeagueId })
         .first();
@@ -105,7 +107,7 @@ class LeaguesService {
             type,
             logo,
             country_id: countryId,
-            season_id: seasonId,
+            season_id: seasonId, // ✅
           });
         updated++;
       } else {
@@ -115,18 +117,13 @@ class LeaguesService {
           type,
           logo,
           country_id: countryId,
-          season_id: seasonId,
+          season_id: seasonId, // ✅
         });
         created++;
       }
     }
 
-    return {
-      ok: true,
-      total: items.length,
-      created,
-      updated,
-    };
+    return { ok: true, total: items.length, created, updated };
   }
 }
 
