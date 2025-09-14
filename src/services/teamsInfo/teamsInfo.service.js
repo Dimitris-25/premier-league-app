@@ -23,7 +23,7 @@ module.exports = function (app) {
   (async () => {
     try {
       console.log("📂 Fetching teamsInfo 2015–2024 from file...");
-      const fileResult = await service.fetchFromFileAll(); // ✅ loop όλες οι χρονιές
+      const fileResult = await service.fetchFromFileAll(); //
       console.log("✅ TeamsInfo file sync complete:", fileResult);
     } catch (err) {
       console.error("❌ Failed to fetch teamsInfo from file:", err.message);
@@ -48,7 +48,7 @@ module.exports = function (app) {
   // 🔹 Custom endpoint: /teamsInfo/refresh/file (2015–2024)
   app.use("/teamsInfo/refresh/file", {
     async find() {
-      return service.fetchFromFileAll(); // ✅ σωστό
+      return service.fetchFromFileAll();
     },
   });
 };

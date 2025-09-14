@@ -1,3 +1,4 @@
+// src/services/teamsInfo/teamsInfo.class.js
 const axios = require("axios");
 const path = require("path");
 const fs = require("fs");
@@ -34,7 +35,7 @@ class TeamsInfoService {
     return { id };
   }
 
-  // 🔹 Fetch from API-Football (only season 2025)
+  // Fetch from API-Football (only season 2025)
   async fetchFromApi() {
     const { API_KEY } = process.env;
     if (!API_KEY) throw new Error("API_KEY is not set");
@@ -54,7 +55,7 @@ class TeamsInfoService {
     return this._upsertTeams(data?.response || [], 2025);
   }
 
-  // 🔹 Load ALL seasons (2015–2024) from JSON
+  // Load ALL seasons (2015–2024) from JSON
   async fetchFromFileAll() {
     try {
       const filePath = path.join(process.cwd(), "files", "teamsData.json");
@@ -94,7 +95,7 @@ class TeamsInfoService {
     }
   }
 
-  // 🔹 Common insert/update logic
+  // Common insert/update logic
   async _upsertTeams(items, season) {
     let created = 0,
       updated = 0;
@@ -108,7 +109,7 @@ class TeamsInfoService {
 
       if (!apiTeamId || !name) continue;
 
-      // ---- Country FK (keep lookup by name as you had)
+      // Country FK (keep lookup by name as you had)
       let countryId = null;
       if (it.team?.country) {
         const country = await this.Model("countries")
@@ -117,7 +118,7 @@ class TeamsInfoService {
         if (country) countryId = country.country_id;
       }
 
-      // ---- Venue FK (lookup by api_venue_id) ✅
+      //  Venue FK (lookup by api_venue_id) ✅
       let venueId = null;
       if (it.venue?.id) {
         const venue = await this.Model("venues")
@@ -126,7 +127,7 @@ class TeamsInfoService {
         if (venue) venueId = venue.venue_id;
       }
 
-      // ---- Insert / Update by api_team_id ✅
+      // Insert / Update by api_team_id ✅
       const existing = await this.Model(this.table)
         .where({ api_team_id: apiTeamId })
         .first();

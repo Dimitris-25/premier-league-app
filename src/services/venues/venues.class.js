@@ -32,7 +32,7 @@ class VenuesService {
     return { id };
   }
 
-  // 🔹 Custom method: fetch from API-Football
+  //  Custom method: fetch from API-Football
   async fetchFromApi() {
     const { API_KEY } = process.env;
     if (!API_KEY) throw new Error("API_KEY is not set");
@@ -41,7 +41,7 @@ class VenuesService {
       "https://v3.football.api-sports.io/venues",
       {
         params: {
-          country: "England", // ✅ μπορούμε να φιλτράρουμε ανά χώρα
+          country: "England",
         },
         headers: {
           "x-apisports-key": API_KEY,
@@ -64,7 +64,7 @@ class VenuesService {
 
       if (!apiVenueId || !name) continue;
 
-      // ---- Country lookup (FK)
+      //  Country lookup (FK)
       let countryId = null;
       if (it.country) {
         const country = await this.Model("countries")
@@ -73,7 +73,7 @@ class VenuesService {
         if (country) countryId = country.country_id;
       }
 
-      // ---- City lookup (FK)
+      // City lookup (FK)
       let cityId = null;
       if (cityName) {
         const existingCity = await this.Model("cities")
@@ -90,7 +90,7 @@ class VenuesService {
         }
       }
 
-      // ---- Insert / Update venue
+      // Insert / Update venue
       const existing = await this.Model(this.table)
         .where({ api_venue_id: apiVenueId })
         .first();

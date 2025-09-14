@@ -1,5 +1,4 @@
 // src/services/playersProfiles/playersProfiles.class.js
-// PlayersProfiles class (same pattern as leagues.class)
 // Source: local file files/players/2025.json (but public method name stays fetchFromApi)
 
 const fs = require("fs");
@@ -13,7 +12,7 @@ class PlayersProfiles {
     this.id = options.id; // "player_id"
   }
 
-  // ---------- Standard CRUD (same style as leagues) ----------
+  //  Standard CRUD
   async find(params) {
     return this.Model(this.table).select("*");
   }
@@ -37,7 +36,7 @@ class PlayersProfiles {
     return { id };
   }
 
-  // ---------- Custom method (keep same name as leagues) ----------
+  //  Custom method
   // Reads players from files/players/2025.json and upserts into playersProfiles
   async fetchFromApi() {
     const filePath = path.join(process.cwd(), "files", "players", "2025.json");

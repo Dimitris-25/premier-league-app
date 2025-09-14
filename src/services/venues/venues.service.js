@@ -23,7 +23,7 @@ module.exports = function (app) {
   const venuesService = app.service("venues");
   venuesService.hooks(hooks);
 
-  // 🔹 Run fetch automatically at startup
+  //  Run fetch automatically at startup
   (async () => {
     try {
       console.log("🏟️ Fetching venues from API-Football...");
@@ -34,7 +34,7 @@ module.exports = function (app) {
     }
   })();
 
-  // 🔹 Add custom endpoint /venues/refresh
+  //  Add custom endpoint /venues/refresh
   app.use("/venues/refresh", {
     async find() {
       return service.fetchFromApi();
