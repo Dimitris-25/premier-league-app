@@ -1,6 +1,4 @@
 // src/services/index.js
-
-// ➜ Χρησιμοποιούμε το ίδιο στυλ όπως πριν (SERVICE_ONLY + reg helper)
 module.exports = function (app) {
   const only = process.env.SERVICE_ONLY; // π.χ. "countries", "leagues", "playersProfiles", ...
 
@@ -8,7 +6,6 @@ module.exports = function (app) {
     if (!only || only === name) app.configure(fn);
   };
 
-  // --- εδώ τα services (όπως παλιά) ---
   // const countries      = require("./countries/countries.service");
   // const leagues        = require("./leagues/leagues.service");
   // const seasons        = require("./seasons/seasons.service");
@@ -18,9 +15,32 @@ module.exports = function (app) {
   // const bookmakers     = require("./bookmakers/bookmakers.service");
   // const bets           = require("./bets/bets.service");
 
-  // ΜΟΝΟ playersProfiles προς το παρόν (με σωστό path/casing)
-  const playersProfiles = require("./playersProfiles/playersProfiles.service");
-
-  // --- καταχώρηση (όπως παλιά με reg) ---
-  reg("playersProfiles", playersProfiles);
+  // const playersProfiles = require("./playersProfiles/playersProfiles.service");
+  // const fixtures = require("./fixtures/fixtures.service");
+  // const fixturesHeadToHead = require("./fixturesHeadToHead/fixturesHeadToHead.service");
+  // const coaches = require("./coaches/coaches.service");
+  // const fixturesLineups = require("./lineups/fixturesLineups.service");
+  // const fixturesStats = require("./fixtureStats/fixturesStats.service");
+  // const events = require("./events/events.service");
+  // const odds = require("./odds/odds.service");
+  // const playersFixturesStats = require("./playersFixturesStats/playersFixturesStats.service");
+  // const playersSeasonStats = require("./playersSeasonsStats/playersSeasonsStats.service");
+  // const playersTopStats = require("./playersTopStats/playersTopStats.service");
+  // const teamStats = require("./teamStats/teamsStats.service");
+  // const injuries = require("./injuries/injuries.service");
+  const transfers = require("./transfers/transfers.service");
+  // reg("playersProfiles", playersProfiles);
+  // reg("fixtures", fixtures);
+  // reg("fixturesHeadToHead", fixturesHeadToHead);
+  // reg("coaches", coaches);
+  // reg("fixturesLineUps", fixturesLineups);
+  // reg("fixtureStats", fixturesStats);
+  // reg("events", events);
+  // reg("odds", odds);
+  // reg("playersFixturesStats", playersFixturesStats);
+  // reg("playersSeasonsStats", playersSeasonStats);
+  // reg("playersTopStats", playersTopStats);
+  // reg("teamStats", teamStats);
+  // reg("injuries", injuries);
+  reg("transfers", transfers);
 };

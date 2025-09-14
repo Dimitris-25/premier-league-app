@@ -12,6 +12,10 @@ const app = express(feathers());
 // Attach Knex client
 app.set("knex", knexClient);
 
+// 👇 alias keys
+app.set("knexClient", knexClient);
+app.set("mysqlClient", knexClient);
+
 // Parse JSON
 app.use(express.json());
 
