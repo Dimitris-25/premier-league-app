@@ -40,7 +40,7 @@ class LeaguesService {
     const { data } = await axios.get(
       "https://v3.football.api-sports.io/leagues",
       {
-        params: { name: "Premier League" }, // ✅ μόνο αυτό κρατάμε
+        params: { name: "Premier League" },
         headers: { "x-apisports-key": API_KEY },
       }
     );
@@ -65,10 +65,9 @@ class LeaguesService {
         if (country) countryId = country.country_id;
       }
 
-      // ---- Season lookup (FK)  ✅ διορθωμένο
+      // ---- Season lookup (FK)
       let seasonId = null;
       if (Array.isArray(it.seasons) && it.seasons.length > 0) {
-        // πάρε προτεραιότητα το current, αλλιώς το πιο πρόσφατο year
         const seasonsArr = it.seasons;
         const s =
           seasonsArr.find((x) => x?.current) ||
@@ -93,7 +92,7 @@ class LeaguesService {
         }
       }
 
-      // ---- Insert / Update league (γράφουμε season_id)
+      // ---- Insert / Update league
       const existing = await this.Model(this.table)
         .where({ api_league_id: apiLeagueId })
         .first();
@@ -107,7 +106,7 @@ class LeaguesService {
             type,
             logo,
             country_id: countryId,
-            season_id: seasonId, // ✅
+            season_id: seasonId,
           });
         updated++;
       } else {
@@ -117,7 +116,7 @@ class LeaguesService {
           type,
           logo,
           country_id: countryId,
-          season_id: seasonId, // ✅
+          season_id: seasonId,
         });
         created++;
       }

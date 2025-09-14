@@ -23,7 +23,7 @@ module.exports = function (app) {
   const leaguesService = app.service("leagues");
   leaguesService.hooks(hooks);
 
-  // 🔹 Run fetch automatically at startup
+  //  Run fetch automatically at startup
   (async () => {
     try {
       console.log("⚽ Fetching leagues from API-Football...");
@@ -34,7 +34,7 @@ module.exports = function (app) {
     }
   })();
 
-  // 🔹 Add custom endpoint /leagues/refresh
+  // Add custom endpoint /leagues/refresh
   app.use("/leagues/refresh", {
     async find() {
       return service.fetchFromApi();
