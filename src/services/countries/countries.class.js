@@ -33,7 +33,7 @@ class CountriesService {
     return { id };
   }
 
-  // 🔹 Custom method: fetch from API-Football
+  // Custom method: fetch from API-Football
   async fetchFromApi() {
     const { API_KEY } = process.env;
     if (!API_KEY) throw new Error("API_KEY is not set");
