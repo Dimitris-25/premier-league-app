@@ -1,0 +1,11 @@
+{
+  "authentication": {
+    "secret": "${JWT_SECRET}",
+    "entity": "user",
+    "service": "users",
+    "authStrategies": ["jwt", "local"],
+    "jwtOptions": { "expiresIn": "1d" },
+    "local": { "usernameField": "email", "passwordField": "password" }
+  },
+  "port": 3030
+}
