@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
 
 exports.up = async function (knex) {
-  const email = "fenomeno979@gmail.com"; // βάλε εδώ το δικό σου email
-  const password = "Mnbvcxzqwert12345555@@@@"; // βάλε ένα δυνατό password
+  const email = "fenomeno979@gmail.com";
+  const password = "Mnbvcxzqwert12345555@@@@";
   const passwordHash = await bcrypt.hash(password, 10);
 
   const existing = await knex("users").where({ email }).first();
@@ -24,7 +24,7 @@ exports.up = async function (knex) {
 };
 
 exports.down = async function (knex) {
-  const email = "admin@example.com"; // ίδιο με το πάνω
+  const email = "admin@example.com";
   await knex("users").where({ email }).del();
   console.log("🗑️ Admin user removed:", email);
 };

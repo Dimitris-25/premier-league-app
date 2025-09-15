@@ -4,14 +4,13 @@ exports.up = async function (knex) {
     // PK
     table.increments("user_id").primary().comment("Primary key");
 
-    // Login key (unique πάντα)
+    // Login key (unique )
     table
       .string("email", 150)
       .notNullable()
       .unique()
       .comment("User email (unique, used for login)");
 
-    // Για local login μόνο – NULL σε social
     table
       .string("password_hash", 255)
       .nullable()
@@ -42,22 +41,19 @@ exports.up = async function (knex) {
       .nullable()
       .comment("External provider user id (e.g., Google sub)");
 
-    // Τελευταίο επιτυχές login
+    // Last login
     table.timestamp("last_login").nullable().comment("Last successful login");
 
     // Timestamps
     table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
     table.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());
 
-    // Προαιρετικά: μοναδικότητα provider+provider_id για social λογαριασμούς
     table.unique(["provider", "provider_id"], {
       indexName: "uq_users_provider_provider_id",
       useConstraint: true,
     });
   });
 
-  // Προαιρετικά για MySQL: updated_at ON UPDATE CURRENT_TIMESTAMP
-  // αν το θες αυτόματο update του updated_at:
   await knex.schema.raw(`
     ALTER TABLE users
     MODIFY COLUMN updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
