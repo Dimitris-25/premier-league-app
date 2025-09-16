@@ -1,5 +1,5 @@
 // src/docs/paths/users.path.js
-// Clean versioned OpenAPI paths for the "users" section.
+// OpenAPI paths for the "users" section (full CRUD)
 
 const userIdParam = {
   name: "user_id",
@@ -12,10 +12,11 @@ module.exports = {
   "/api/v1/users": {
     get: {
       tags: ["users"],
-      summary: "List users",
+      summary: "List all users",
+      operationId: "users_find",
       responses: {
         200: {
-          description: "OK",
+          description: "Array of users",
           content: {
             "application/json": {
               schema: {
@@ -27,10 +28,10 @@ module.exports = {
         },
       },
     },
-
     post: {
       tags: ["users"],
-      summary: "Create user",
+      summary: "Create a new user",
+      operationId: "users_create",
       requestBody: {
         required: true,
         content: {
@@ -40,8 +41,8 @@ module.exports = {
         },
       },
       responses: {
-        200: {
-          description: "Created",
+        201: {
+          description: "User created",
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/User" },
@@ -50,10 +51,10 @@ module.exports = {
         },
       },
     },
-
     patch: {
       tags: ["users"],
-      summary: "Patch many users",
+      summary: "Patch multiple users",
+      operationId: "users_patch_many",
       requestBody: {
         required: true,
         content: {
@@ -62,24 +63,25 @@ module.exports = {
           },
         },
       },
-      responses: { 200: { description: "OK" } },
+      responses: { 200: { description: "Users patched" } },
     },
-
     delete: {
       tags: ["users"],
-      summary: "Delete many users",
-      responses: { 200: { description: "OK" } },
+      summary: "Delete multiple users",
+      operationId: "users_remove_many",
+      responses: { 200: { description: "Users deleted" } },
     },
   },
 
   "/api/v1/users/{user_id}": {
     get: {
       tags: ["users"],
-      summary: "Get user by id",
+      summary: "Get user by ID",
+      operationId: "users_get",
       parameters: [userIdParam],
       responses: {
         200: {
-          description: "OK",
+          description: "User object",
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/User" },
@@ -88,10 +90,10 @@ module.exports = {
         },
       },
     },
-
     patch: {
       tags: ["users"],
-      summary: "Patch user by id",
+      summary: "Patch user by ID",
+      operationId: "users_patch",
       parameters: [userIdParam],
       requestBody: {
         required: true,
@@ -101,14 +103,14 @@ module.exports = {
           },
         },
       },
-      responses: { 200: { description: "OK" } },
+      responses: { 200: { description: "User patched" } },
     },
-
     delete: {
       tags: ["users"],
-      summary: "Delete user by id",
+      summary: "Delete user by ID",
+      operationId: "users_remove",
       parameters: [userIdParam],
-      responses: { 200: { description: "OK" } },
+      responses: { 200: { description: "User deleted" } },
     },
   },
 };

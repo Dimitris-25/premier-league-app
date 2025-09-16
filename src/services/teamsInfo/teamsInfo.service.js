@@ -13,10 +13,10 @@ module.exports = function (app) {
 
   // Initialize service
   const service = new TeamsInfoService(options);
-  app.use("/teamsInfo", service);
+  app.use("/api/v1/teamsInfo", service);
 
   // Register hooks
-  const teamsInfoService = app.service("teamsInfo");
+  const teamsInfoService = app.service("api/v1/teamsInfo");
   teamsInfoService.hooks(hooks);
 
   // 🔹 Run both file (2015–2024) + API (2025) fetch automatically at startup
@@ -39,14 +39,14 @@ module.exports = function (app) {
   })();
 
   // 🔹 Custom endpoint: /teamsInfo/refresh/api (season 2025 only)
-  app.use("/teamsInfo/refresh/api", {
+  app.use("/api/v1/teamsInfo/refresh/api", {
     async find() {
       return service.fetchFromApi();
     },
   });
 
   // 🔹 Custom endpoint: /teamsInfo/refresh/file (2015–2024)
-  app.use("/teamsInfo/refresh/file", {
+  app.use("/api/v1/teamsInfo/refresh/file", {
     async find() {
       return service.fetchFromFileAll();
     },

@@ -7,5 +7,7 @@
     "jwtOptions": { "expiresIn": "1d" },
     "local": { "usernameField": "email", "passwordField": "password" }
   },
+
+  "seedVenuesOnBoot": false,
   "port": 3030
 }

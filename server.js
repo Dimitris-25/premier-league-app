@@ -1,4 +1,4 @@
-// Entry point to start the Feathers application
+// server.js (entry point)
 const app = require("./src/app");
 const logger = require("./src/logger");
 

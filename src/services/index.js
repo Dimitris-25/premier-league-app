@@ -10,16 +10,27 @@ module.exports = function (app) {
   const users = require("./user/users.service");
   // const countries = require("./countries/countries.service");
   // const leagues = require("./leagues/leagues.service");
-  // const seasons = require("./seasons/seasons.service");
-  // const venues = require("./venues/venues.service");
-  // const teamsInfo = require("./teamsInfo/teamsInfo.service");
+  const seasons = require("./seasons/seasons.service");
+  const venues = require("./venues/venues.service");
+  const teamsInfo = require("./teamsInfo/teamsInfo.service");
+  const transfers = require("./transfers/transfers.service");
+  const teamStats = require("./teamStats/teamsStats.service");
+  const playersTopStats = require("./playersTopStats/playersTopStats.service");
+  const playersSeasonsStats = require("./playersSeasonsStats/playersSeasonsStats.service");
+  const playersProfiles = require("./playersProfiles/playersProfiles.service");
+
+  reg("playersProfiles", playersProfiles);
+  reg("playersSeasonsStats", playersSeasonsStats);
+  reg("playersTopStats", playersTopStats);
+  reg("transfers", transfers);
+  reg("teamStats", teamStats);
 
   reg("users", users);
   // reg("countries", countries);
   // reg("leagues", leagues);
-  // reg("seasons", seasons);
-  // reg("venues", venues);
-  // reg("teamsInfo", teamsInfo);
+  reg("seasons", seasons);
+  reg("venues", venues);
+  reg("teamsInfo", teamsInfo);
 
   // -------------------------
   // Import services (τρέχουν ΜΟΝΟ αν IMPORT_ON_START=true)
@@ -32,7 +43,6 @@ module.exports = function (app) {
     // const events = require("./events/events.service");
     // const transfers = require("./transfers/transfers.service");
     // const playersProfiles = require("./playersProfiles/playersProfiles.service");
-    // const playersFixturesStats = require("./playersFixturesStats/playersFixturesStats.service");
     // const playersSeasonsStats = require("./playersSeasonsStats/playersSeasonsStats.service");
     // const playersTopStats = require("./playersTopStats/playersTopStats.service");
     // const odds = require("./odds/odds.service");
@@ -49,7 +59,6 @@ module.exports = function (app) {
     // reg("events", events);
     // reg("transfers", transfers);
     // reg("playersProfiles", playersProfiles);
-    // reg("playersFixturesStats", playersFixturesStats);
     // reg("playersSeasonsStats", playersSeasonsStats);
     // reg("playersTopStats", playersTopStats);
     // reg("odds", odds);
