@@ -1,29 +1,29 @@
 // src/docs/paths/login.path.js
-// OpenAPI paths for the "login" flows
+// OpenAPI paths for the "login" flows (always exposed)
 
-const LoginRequest = { $ref: "#/components/schemas/LoginRequest" };
-const AuthTokenResponse = { $ref: "#/components/schemas/AuthTokenResponse" };
-const ErrorResponse = { $ref: "#/components/schemas/ErrorResponse" };
-const TestTokenResponse = { $ref: "#/components/schemas/TestTokenResponse" };
+const LoginRequest = { $ref: "#/docs/schemas/LoginRequest" };
+const AuthTokenResponse = { $ref: "#/docs/schemas/AuthTokenResponse" };
+const ErrorResponse = { $ref: "#/docs/schemas/ErrorResponse" };
+const TestTokenResponse = { $ref: "#/docs/schemas/TestTokenResponse" };
 const PasswordResetRequest = {
-  $ref: "#/components/schemas/PasswordResetRequest",
+  $ref: "#/docs/schemas/PasswordResetRequest",
 };
 const PasswordRecoveryResponse = {
-  $ref: "#/components/schemas/PasswordRecoveryResponse",
+  $ref: "#/docs/schemas/PasswordRecoveryResponse",
 };
 const TokenValidityResponse = {
-  $ref: "#/components/schemas/TokenValidityResponse",
+  $ref: "#/docs/schemas/TokenValidityResponse",
 };
-const MessageResponse = { $ref: "#/components/schemas/MessageResponse" };
+const MessageResponse = { $ref: "#/docs/schemas/MessageResponse" };
 
 module.exports = {
   "/api/v1/login/access-token": {
     post: {
       tags: ["login"],
-      summary: "Login Access Token",
+      summary: "Login & get JWT",
       description: "Authenticate with email & password and receive a JWT.",
-      operationId: "loginAccessToken",
-      security: [], // public
+      operationId: "login_access_token",
+      security: [], // public (overrides global bearer)
       requestBody: {
         required: true,
         content: {
@@ -40,26 +40,7 @@ module.exports = {
       responses: {
         200: {
           description: "Successful authentication",
-          content: {
-            "application/json": {
-              schema: AuthTokenResponse,
-              example: {
-                accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                tokenType: "Bearer",
-                user: {
-                  user_id: 101,
-                  email: "user@example.com",
-                  role: "user",
-                  is_active: true,
-                  provider: "local",
-                  provider_id: null,
-                  last_login: "2025-09-15T15:20:30Z",
-                  created_at: "2025-09-01T10:00:00Z",
-                  updated_at: "2025-09-10T12:34:56Z",
-                },
-              },
-            },
-          },
+          content: { "application/json": { schema: AuthTokenResponse } },
         },
         401: {
           description: "Invalid credentials",
@@ -72,22 +53,14 @@ module.exports = {
   "/api/v1/login/test-token": {
     post: {
       tags: ["login"],
-      summary: "Test Token",
+      summary: "Validate JWT",
       description: "Verify a Bearer JWT and return the associated user.",
-      operationId: "testToken",
+      operationId: "login_test_token",
       security: [{ bearer: [] }], // requires Bearer
       responses: {
         200: {
           description: "Token is valid",
-          content: {
-            "application/json": {
-              schema: TestTokenResponse,
-              example: {
-                valid: true,
-                user: { user_id: 2, email: "admin@example.com", role: "admin" },
-              },
-            },
-          },
+          content: { "application/json": { schema: TestTokenResponse } },
         },
         401: {
           description: "Missing or invalid token",
@@ -97,13 +70,31 @@ module.exports = {
     },
   },
 
+  ["/api/v1/login/google"]: {
+    get: {
+      tags: ["login"],
+      summary: "Login with Google (redirect)",
+      description:
+        "Starts the Google OAuth flow. If Google OAuth is not configured, returns 501.",
+      operationId: "login_google",
+      responses: {
+        302: {
+          description: "Redirect to Google OAuth consent page",
+        },
+        501: {
+          description: "Google OAuth is not configured on the server",
+        },
+      },
+    },
+  },
+
   "/api/v1/password-recovery/{email}": {
     post: {
       tags: ["login"],
-      summary: "Recover Password",
+      summary: "Recover password",
       description:
         "Request a password reset email. Always returns 200 to avoid account enumeration.",
-      operationId: "passwordRecovery",
+      operationId: "password_recovery",
       security: [], // public
       parameters: [
         {
@@ -116,15 +107,7 @@ module.exports = {
       responses: {
         200: {
           description: "Generic success response",
-          content: {
-            "application/json": {
-              schema: PasswordRecoveryResponse,
-              example: {
-                message:
-                  "If an account with that email exists, a password recovery email has been sent.",
-              },
-            },
-          },
+          content: { "application/json": { schema: PasswordRecoveryResponse } },
         },
         429: {
           description: "Too many requests",
@@ -134,13 +117,14 @@ module.exports = {
     },
   },
 
-  "/api/v1/reset-password/": {
+  // No trailing slash for consistency with other paths
+  "/api/v1/reset-password": {
     post: {
       tags: ["login"],
-      summary: "Reset Password",
+      summary: "Reset password",
       description:
-        "Reset password using a one-time token and a new password (min length enforced).",
-      operationId: "resetPassword",
+        "Reset password using a one-time token and a new password (minimum length enforced).",
+      operationId: "reset_password",
       security: [], // public
       requestBody: {
         required: true,
@@ -161,12 +145,7 @@ module.exports = {
       responses: {
         200: {
           description: "Password changed",
-          content: {
-            "application/json": {
-              schema: MessageResponse,
-              example: { message: "Password has been updated." },
-            },
-          },
+          content: { "application/json": { schema: MessageResponse } },
         },
         400: {
           description: "Invalid or expired token / weak password",
@@ -183,9 +162,9 @@ module.exports = {
   "/api/v1/reset-password/{token}": {
     get: {
       tags: ["login"],
-      summary: "Reset Password Check Token",
-      description: "Lightweight validity check for a reset token.",
-      operationId: "checkResetToken",
+      summary: "Check reset token",
+      description: "Lightweight validity check for a password reset token.",
+      operationId: "reset_password_check",
       security: [], // public
       parameters: [
         {
@@ -198,12 +177,7 @@ module.exports = {
       responses: {
         200: {
           description: "Token validity",
-          content: {
-            "application/json": {
-              schema: TokenValidityResponse,
-              example: { valid: true },
-            },
-          },
+          content: { "application/json": { schema: TokenValidityResponse } },
         },
       },
     },

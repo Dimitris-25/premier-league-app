@@ -17,10 +17,10 @@ module.exports = function (app) {
 
   // Initialize service
   const service = new CitiesService(options);
-  app.use("/cities", service);
+  app.use("/api/v1/cities", service);
 
   // Register hooks
-  const citiesService = app.service("cities");
+  const citiesService = app.service("/api/v1/cities");
   citiesService.hooks(hooks);
 
   // 🔹 Run fetch automatically at startup
@@ -35,7 +35,7 @@ module.exports = function (app) {
   })();
 
   // 🔹 Add custom endpoint /cities/refresh
-  app.use("/cities/refresh", {
+  app.use("/api/v1/cities/refresh", {
     async find() {
       return service.fetchFromApi();
     },

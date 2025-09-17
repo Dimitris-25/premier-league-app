@@ -9,7 +9,7 @@ class Bets {
     this.id = options.id; // "bet_id"
   }
 
-  // -------- Standard CRUD --------
+  // Standard CRUD
   async find(params) {
     return this.Model(this.table).select("*");
   }

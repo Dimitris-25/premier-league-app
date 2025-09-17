@@ -12,13 +12,13 @@ module.exports = function (app) {
 
   // Initialize service
   const service = new Bets(options);
-  app.use("/bets", service);
+  app.use("/api/v1/bets", service);
 
   // Register hooks
-  const betsService = app.service("bets");
+  const betsService = app.service("/api/v1/bets");
   betsService.hooks(hooks);
 
-  // 🔹 Run fetch automatically at startup
+  // Run fetch automatically at startup
   (async () => {
     try {
       console.log("🎲 Fetching bets & odds from API-Football...");
@@ -29,8 +29,8 @@ module.exports = function (app) {
     }
   })();
 
-  // 🔹 Add custom endpoint /bets/refresh
-  app.use("/bets/refresh", {
+  // Add custom endpoint /bets/refresh
+  app.use("/api/v1/bets/refresh", {
     async find() {
       return service.fetchAllFromApi();
     },

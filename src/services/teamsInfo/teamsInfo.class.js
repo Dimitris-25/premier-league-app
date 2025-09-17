@@ -58,7 +58,12 @@ class TeamsInfoService {
   // Load ALL seasons (2015–2024) from JSON
   async fetchFromFileAll() {
     try {
-      const filePath = path.join(process.cwd(), "files", "teamsData.json");
+      const filePath = path.join(
+        process.cwd(),
+        "files",
+        "teams",
+        "teamsData.json"
+      );
       const raw = fs.readFileSync(filePath, "utf-8");
 
       let json;

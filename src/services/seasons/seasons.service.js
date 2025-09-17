@@ -6,11 +6,11 @@ module.exports = function (app) {
 
   const options = { Model: knex, name: "seasons", id: "season_id" };
 
-  app.use("/api/seasons", new SeasonsService(options), {
+  app.use("/api/v1/seasons", new SeasonsService(options), {
     methods: ["find", "get", "create", "patch", "remove", "fetchFromApi"],
   });
 
-  const service = app.service("api/seasons");
+  const service = app.service("/api/v1/seasons");
   service.hooks(hooks);
 
   (async () => {

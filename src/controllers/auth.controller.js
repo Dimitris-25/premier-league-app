@@ -54,13 +54,11 @@ async function loginAccessToken(req, res, next) {
     });
   } catch (err) {
     if (err && (err.code === 401 || err.name === "NotAuthenticated")) {
-      return res
-        .status(401)
-        .json({
-          statusCode: 401,
-          error: "Unauthorized",
-          message: "Invalid credentials.",
-        });
+      return res.status(401).json({
+        statusCode: 401,
+        error: "Unauthorized",
+        message: "Invalid credentials.",
+      });
     }
     return next(err);
   }
@@ -131,6 +129,18 @@ async function passwordRecovery(req, res, next) {
   }
 }
 
+async function loginGoogle(req, res) {
+  const hasGoogle =
+    !!process.env.GOOGLE_CLIENT_ID && !!process.env.GOOGLE_CLIENT_SECRET;
+
+  if (!hasGoogle) {
+    return res.status(501).json({ ok: false, error: "google_oauth_disabled" });
+  }
+
+  // Start Feathers OAuth flow (handled by authentication.js -> app.configure(oauth()))
+  return res.redirect("/oauth/google");
+}
+
 /**
  * GET /api/v1/reset-password/:token
  * Quick check whether a provided reset token is valid (exists, not used, not expired).
@@ -153,13 +163,11 @@ async function checkResetToken(req, res, next) {
     const row = await knex("password_resets").where({ token_hash }).first();
 
     if (!row || row.used_at || new Date(row.expires_at) < new Date()) {
-      return res
-        .status(410)
-        .json({
-          statusCode: 410,
-          error: "Gone",
-          message: "Token expired or already used.",
-        });
+      return res.status(410).json({
+        statusCode: 410,
+        error: "Gone",
+        message: "Token expired or already used.",
+      });
     }
 
     return res.status(200).json({ valid: true });
@@ -191,17 +199,18 @@ async function resetPassword(req, res, next) {
     const row = await knex("password_resets").where({ token_hash }).first();
 
     if (!row || row.used_at || new Date(row.expires_at) < new Date()) {
-      return res
-        .status(410)
-        .json({
-          statusCode: 410,
-          error: "Gone",
-          message: "Token expired or already used.",
-        });
+      return res.status(410).json({
+        statusCode: 410,
+        error: "Gone",
+        message: "Token expired or already used.",
+      });
     }
 
     const saltRounds = Number(process.env.BCRYPT_ROUNDS || 10);
     const password_hash = await bcrypt.hash(String(newPassword), saltRounds);
+
+    console.log("Salt rounds:", saltRounds);
+    console.log("Hash:", hash);
 
     // Update user's password
     await knex("users")
@@ -225,4 +234,5 @@ module.exports = {
   passwordRecovery,
   checkResetToken,
   resetPassword,
+  loginGoogle,
 };

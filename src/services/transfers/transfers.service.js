@@ -12,23 +12,16 @@ module.exports = function (app) {
     teamsTable: "teamsInfo",
   };
 
-  const service = new Transfers(options);
-  app.use("/transfers", service);
+  const BASE = "/api/v1/transfers"; // ✅ ίδιο prefix με Swagger
 
-  const transfersService = app.service("transfers");
+  const service = new Transfers(options);
+  app.use(BASE, service); // ✅ mount στο /api/v1/...
+
+  const transfersService = app.service(BASE); // ✅ hooks στο canonical path
   transfersService.hooks(hooks);
 
-  (async () => {
-    try {
-      console.log("🔁 Importing transfers from local file...");
-      const result = await service.fetchFromApi();
-      console.log("✅ Transfers import:", result);
-    } catch (err) {
-      console.error("❌ Transfers import failed:", err.message);
-    }
-  })();
-
-  app.use("/transfers/refresh", {
+  // (προαιρετικό) manual refresh endpoint
+  app.use(`${BASE}/refresh`, {
     async find() {
       return service.fetchFromApi();
     },

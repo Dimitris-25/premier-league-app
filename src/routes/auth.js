@@ -1,26 +1,28 @@
 // src/routes/auth.js
-// Custom login/recovery routes under /api/v1/* (curated to match OpenAPI).
-// Includes validation (Zod) and rate limiting. Uses Feathers JWT middleware
-// only for the protected test-token endpoint.
+// Curated login/recovery routes under /api/v1/* (hidden from Feathers services & docs).
+// Includes validation (Zod) and rate limiting. JWT guard only for the protected test-token.
 
 const express = require("express");
 const { authenticate } = require("@feathersjs/express"); // Feathers JWT guard
 
-// NOTE: If your controller file is named `authController.js` adjust the path accordingly.
+// Controllers
 const {
   loginAccessToken,
   testToken,
   passwordRecovery,
   resetPassword,
   checkResetToken,
+  loginGoogle, // <-- added
 } = require("../controllers/auth.controller");
 
+// Rate limiters
 const {
   loginLimiter,
   recoveryLimiter,
   resetLimiter,
 } = require("../middleware/rateLimit");
 
+// Zod validators
 const {
   loginBody,
   resetBody,
@@ -31,45 +33,42 @@ const {
 module.exports = (app) => {
   const router = express.Router();
 
+  // Google login (redirect wrapper) via controller
+  router.get("/api/v1/login/google", loginGoogle);
+
   // Public endpoints (no JWT required)
-  // Issue JWT using local strategy
   router.post(
     "/api/v1/login/access-token",
-    loginLimiter, // rate limit login attempts
-    loginBody, // validate { email, password }
+    loginLimiter,
+    loginBody,
     loginAccessToken
   );
 
-  // Send password recovery email (generic response to avoid info leakage)
   router.post(
     "/api/v1/password-recovery/:email",
-    recoveryLimiter, // rate limit recovery attempts
-    emailParam, // validate :email
+    recoveryLimiter,
+    emailParam,
     passwordRecovery
   );
 
-  // Reset password using token + newPassword
   router.post(
     "/api/v1/reset-password/",
-    resetLimiter, // rate limit resets
-    resetBody, // validate { token, newPassword }
+    resetLimiter,
+    resetBody,
     resetPassword
   );
 
-  // Quick check if a reset token is still valid
+  router.get("/api/v1/login/google", loginGoogle);
+
   router.get(
     "/api/v1/reset-password/:token",
-    resetLimiter, // mild protection
-    tokenParam, // validate :token
+    resetLimiter,
+    tokenParam,
     checkResetToken
   );
 
-  //  Protected endpoint (requires Bearer JWT)
-  router.post(
-    "/api/v1/login/test-token",
-    authenticate("jwt"), // verifies JWT and populates req.params.user
-    testToken
-  );
+  // Protected endpoint (requires Bearer JWT)
+  router.post("/api/v1/login/test-token", authenticate("jwt"), testToken);
 
   app.use(router);
 };

@@ -1,17 +1,18 @@
-// Entry point to start the Feathers application
+// server.js
 const app = require("./src/app");
 const logger = require("./src/logger");
 
 const port = process.env.PORT || 3030;
+const host = `http://localhost:${port}`;
 
-// Start Feathers app
+// Start app
 app.listen(port);
 
 // Log when server is listening
 app.on("listening", () => {
-  logger.info(`Feathers app running at http://localhost:${port}`);
-  console.log(`Server: http://localhost:${port}`);
-  console.log(`Docs:   http://localhost:${port}/docs`);
+  logger.info(`Feathers app running at ${host}`);
+  console.log(`Server: ${host}`);
+  console.log(`Docs:   ${host}/docs`);
 });
 
 // Log unexpected errors

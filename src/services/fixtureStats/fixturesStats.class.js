@@ -1,4 +1,3 @@
-// src/services/playersFixturesStats/playersFixturesStats.class.js
 
 const fs = require("fs");
 const path = require("path");
@@ -20,7 +19,6 @@ class PlayersFixturesStatsService {
   constructor(options) {
     this.options = options;
     this.Model = options.Model; // knex
-    this.table = options.name; // 'playersFixturesStats'
     this.id = options.id || "id"; // PK
     this.file = options.file; // optional absolute file path
     this.fixturesTable = "fixtures";
@@ -58,7 +56,6 @@ class PlayersFixturesStatsService {
   readItems() {
     const file = this.getInputFile();
     if (!fs.existsSync(file)) {
-      throw new Error(`[playersFixturesStats] File not found: ${file}`);
     }
     const raw = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "");
     const json = JSON.parse(raw);

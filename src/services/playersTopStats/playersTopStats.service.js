@@ -39,10 +39,10 @@ module.exports = function (app) {
 
   // Initialize service
   const service = new PlayersTopStatsService(options);
-  app.use("/players-top-stats", service);
+  app.use("/api/v1/players-top-stats", service);
 
   // Register hooks
-  const ptsService = app.service("/players-top-stats");
+  const ptsService = app.service("/api/v1/players-top-stats");
   ptsService.hooks(hooks);
 
   // Auto-import on boot (non-blocking)
@@ -57,7 +57,7 @@ module.exports = function (app) {
   })();
 
   // Manual refresh endpoint
-  app.use("/players-top-stats/refresh", {
+  app.use("/api/v1/players-top-stats/refresh", {
     async find() {
       return service.fetchFromFile();
     },
