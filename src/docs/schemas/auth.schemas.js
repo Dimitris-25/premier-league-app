@@ -18,7 +18,7 @@ module.exports = {
       tokenType: { type: "string", example: "Bearer" },
       // expiresIn can be included if you expose it
       // expiresIn: { type: "integer", description: "Seconds until expiry" },
-      user: { $ref: "#/components/schemas/User" },
+      user: { $ref: "#/docs/schemas/User" },
     },
   },
 
@@ -26,7 +26,7 @@ module.exports = {
     type: "object",
     properties: {
       valid: { type: "boolean" },
-      user: { $ref: "#/components/schemas/User" },
+      user: { $ref: "#/docs/schemas/User" },
     },
   },
 
