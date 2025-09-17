@@ -23,4 +23,13 @@ module.exports = [
   },
   { name: "playersSeasonsStats", description: "Players season stats" },
   { name: "playersProfiles", description: "Players profiles" },
+  { name: "odds", description: "Pre matchs odds" },
+  { name: "fixturesLineups", description: "Lineups" },
+  { name: "events", description: "Show matches stats" },
+  { name: "countries", description: "All the countries " },
+  { name: "coaches", description: "All coaches of premier league" },
+  { name: "cities", description: "All the cities of England" },
+  { name: "bookmakers", description: "All the books of England" },
+  { name: "bets", description: "All bets props" },
+  { name: "leagues", description: "All leagues" },
 ];

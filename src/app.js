@@ -14,37 +14,68 @@ const logger = require("./logger");
 
 const app = express(feathers());
 
-// ---- App configuration (.env, default.json, etc.)
+// ------------------------------------------------------------------
+// Load config files (.env, default.json, production.json, ...)
+// ------------------------------------------------------------------
 app.configure(configuration());
 
-// ---- Body parsers MUST be before rest/services so POST JSON is parsed
+// ------------------------------------------------------------------
+// Ensure host / port / protocol are set EARLY (used by OAuth to build URLs)
+// Host must be hostname ONLY (no schema, no port) to avoid ":3030:3030"
+// ------------------------------------------------------------------
+const port = Number(process.env.PORT || app.get("port") || 3030);
+app.set("port", port);
+app.set("host", process.env.HOSTNAME || "localhost"); // <-- hostname only
+app.set("protocol", (process.env.PROTOCOL || "http").replace(":", "")); // "http"
+
+logger.info(`App host set to ${app.get("host")} (port ${app.get("port")})`);
+
+// ------------------------------------------------------------------
+// Body parsers (must come before rest/services so JSON is parsed)
+// ------------------------------------------------------------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ---- Feathers REST transport
+// ------------------------------------------------------------------
+// Feathers REST transport
+// ------------------------------------------------------------------
 app.configure(express.rest());
 
-// ---- DB handles (knex available to services/hooks)
+// ------------------------------------------------------------------
+// DB handles (knex available via app.get('knex'))
+// ------------------------------------------------------------------
 app.set("knex", knexClient);
 app.set("knexClient", knexClient);
 app.set("mysqlClient", knexClient);
 
-// ---- PRE middlewares (cors/helmet/rate-limit etc.). Do NOT put parsers here.
+// ------------------------------------------------------------------
+// PRE middlewares (cors/helmet/rate-limit etc.)
+// ------------------------------------------------------------------
 app.configure(middleware.pre);
 
-// ---- Swagger (UI at /docs, JSON at /openapi.json) – after parsers
+// ------------------------------------------------------------------
+// Swagger (UI at /docs, JSON at /openapi.json)
+// ------------------------------------------------------------------
 app.configure(setupSwagger);
 
-// ---- Services (users before auth so strategies can resolve entities)
+// ------------------------------------------------------------------
+// Services (users before auth so strategies can resolve entities)
+// ------------------------------------------------------------------
 app.configure(services);
 
-// ---- Authentication (depends on users service)
+// ------------------------------------------------------------------
+// Authentication (depends on users service)
+// ------------------------------------------------------------------
 app.configure(authentication);
 
-// ---- Custom login routes (issue JWT, test-token, etc.)
+// ------------------------------------------------------------------
+// Custom login routes (/api/v1/login/*, google wrapper, etc.)
+// ------------------------------------------------------------------
 app.configure(authRoutes);
 
-// ---- After successful authentication: update last_login and never leak hash
+// ------------------------------------------------------------------
+// After successful auth: update last_login & never leak password_hash
+// ------------------------------------------------------------------
 const setLastLogin = async (context) => {
   const { app, result } = context;
   const u = result?.user;
@@ -54,23 +85,24 @@ const setLastLogin = async (context) => {
       .where("user_id", u.user_id)
       .update({ last_login: knex.fn.now(), updated_at: knex.fn.now() });
   }
-  if (context.result?.user) {
-    delete context.result.user.password_hash;
-  }
+  if (context.result?.user) delete context.result.user.password_hash;
   return context;
 };
 
-// Register auth hook if service is present
 if (app.service("authentication")) {
   app.service("authentication").hooks({
     after: { create: [setLastLogin] },
   });
 }
 
-// ---- Healthcheck
+// ------------------------------------------------------------------
+// Healthcheck
+// ------------------------------------------------------------------
 app.get("/", (_req, res) => res.json({ message: "Feathers app is running" }));
 
-// ---- POST middlewares (404 + global error handler)
+// ------------------------------------------------------------------
+// POST middlewares (404 + global error handler)
+// ------------------------------------------------------------------
 app.configure(middleware.post);
 
 logger.info("Feathers app initialized");
