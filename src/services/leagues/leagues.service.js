@@ -17,10 +17,10 @@ module.exports = function (app) {
 
   // Initialize service
   const service = new LeaguesService(options);
-  app.use("/leagues", service);
+  app.use("api/v1/leagues", service);
 
   // Register hooks
-  const leaguesService = app.service("leagues");
+  const leaguesService = app.service("api/v1/leagues");
   leaguesService.hooks(hooks);
 
   //  Run fetch automatically at startup
@@ -35,7 +35,7 @@ module.exports = function (app) {
   })();
 
   // Add custom endpoint /leagues/refresh
-  app.use("/leagues/refresh", {
+  app.use("api/v1/leagues/refresh", {
     async find() {
       return service.fetchFromApi();
     },

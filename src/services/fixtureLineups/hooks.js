@@ -1,15 +1,15 @@
-// src/services/events/hooks.js
-// Hooks για Events
-// - Δημόσιο read (find/get)
+// src/services/lineups/hooks.js
+// Hooks for FixturesLineups service
+// - Public read (find/get)
 // - Admin-only write (create/patch/remove)
-// - Κλείδωμα πεδίων: PK + fixture_id + timestamps
-// - Αφαίρεση DB-managed timestamps από εισερχόμενα payloads
-// - Υποχρεωτικά πεδία στο create
+// - Lock immutable fields: PK + natural key (fixture_id, team_id) + timestamps
+// - Strip DB-managed timestamps before write
+// - Validate required fields on create
 
 const { authExternal, requireRoles } = require("../../hooks/common/security");
 const { hideFields, preventChanging } = require("../../hooks/common/sanitize");
 
-// Αφαίρεση timestamps που τα διαχειρίζεται η ΒΔ
+// Remove DB-managed timestamps from incoming payloads
 const stripTimestamps = () => async (ctx) => {
   if (ctx.data) {
     delete ctx.data.created_at;
@@ -18,7 +18,7 @@ const stripTimestamps = () => async (ctx) => {
   return ctx;
 };
 
-// Έλεγχος υποχρεωτικών πεδίων στο create
+// Enforce required fields on create
 const requireOnCreate =
   (fields = []) =>
   async (ctx) => {
@@ -32,11 +32,17 @@ const requireOnCreate =
     return ctx;
   };
 
-// Μη μεταβαλλόμενα πεδία μετά την εισαγωγή
-const READ_ONLY = ["event_id", "fixture_id", "created_at", "updated_at"];
+// Immutable fields after insert
+const READ_ONLY = [
+  "lineup_id", // PK
+  "fixture_id", // natural key
+  "team_id", // natural key
+  "created_at",
+  "updated_at",
+];
 
-// Υποχρεωτικά πεδία στη δημιουργία
-const REQUIRED_ON_CREATE = ["fixture_id", "time_elapsed", "type", "detail"];
+// Required fields on create
+const REQUIRED_ON_CREATE = ["fixture_id", "team_id"];
 
 module.exports = {
   before: {
@@ -63,6 +69,7 @@ module.exports = {
   },
 
   after: {
+    // Placeholder: hide sensitive fields if needed later
     all: [hideFields([])],
   },
 

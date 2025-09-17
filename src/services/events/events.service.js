@@ -17,11 +17,11 @@ module.exports = function (app) {
     ),
   });
 
-  app.use("/events", service);
-  app.service("/events").hooks(hooks);
+  app.use("/api/v1/events", service);
+  app.service("/api/v1/events").hooks(hooks);
 
   // Optional helper endpoint — same idea as other services
-  app.get("/events/refresh", async (req, res, next) => {
+  app.get("/api/v1/events/refresh", async (req, res, next) => {
     try {
       const result = await service.fetchFromApi();
       res.json({ ok: true, ...result });
