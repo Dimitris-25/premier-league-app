@@ -1,8 +1,8 @@
 // src/services/coaches/coaches.service.js
-// - Registers the service at /coaches
+// - Registers the service at /api/v1/coaches
 // - Hooks registration
 // - Auto-import at startup from files/teams/coaches_2025.json
-// - Custom endpoint /coaches/import?file=<relativePath>
+// - Custom endpoint /api/v1/coaches/refresh
 
 const path = require("path");
 const { CoachesService } = require("./coaches.class");
@@ -15,15 +15,15 @@ module.exports = function (app) {
     Model: knex,
     name: "coaches",
     id: "coach_id",
+    multi: ["create", "patch", "remove"],
   };
 
-  // Initialize service
-  const service = new CoachesService(options);
-  app.use("/coaches", service);
+  // Register Feathers CRUD service
+  app.use("/api/v1/coaches", new CoachesService(options));
 
   // Register hooks
-  const coachesService = app.service("coaches");
-  coachesService.hooks(hooks);
+  const service = app.service("/api/v1/coaches");
+  service.hooks(hooks);
 
   // Auto-import on startup (reads local JSON)
   (async () => {
@@ -38,12 +38,15 @@ module.exports = function (app) {
     }
   })();
 
-  // Custom endpoint to re-import on demand
-  app.use("/coaches/import", {
-    async find(params) {
+  // Custom endpoint for refresh (import from file)
+  app.get("/api/v1/coaches/refresh", async (req, res, next) => {
+    try {
       const rel =
-        params?.query?.file || path.join("files", "teams", "coaches_2025.json");
-      return service.importFromFile(rel);
-    },
+        req.query.file || path.join("files", "teams", "coaches_2025.json");
+      const result = await service.importFromFile(rel);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 };

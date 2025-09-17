@@ -10,7 +10,7 @@ class Bookmakers {
     this.id = options.id; // "bookmaker_id"
   }
 
-  // -------- Standard CRUD (Feathers calls these) --------
+  // Standard CRUD (Feathers calls these)
   async find(params) {
     return this.Model(this.table).select("*");
   }

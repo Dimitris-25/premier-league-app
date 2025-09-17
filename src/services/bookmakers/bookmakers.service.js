@@ -17,10 +17,10 @@ module.exports = function (app) {
 
   // Initialize service
   const service = new Bookmakers(options);
-  app.use("/bookmakers", service);
+  app.use("/api/v1/bookmakers", service);
 
   // Register hooks
-  const bookmakersService = app.service("bookmakers");
+  const bookmakersService = app.service("/api/v1/bookmakers");
   bookmakersService.hooks(hooks);
 
   // 🔹 Run fetch automatically at startup
@@ -35,7 +35,7 @@ module.exports = function (app) {
   })();
 
   // 🔹 Add custom endpoint /bookmakers/refresh
-  app.use("/bookmakers/refresh", {
+  app.use("/api/v1/bookmakers/refresh", {
     async find() {
       return service.fetchFromApi();
     },

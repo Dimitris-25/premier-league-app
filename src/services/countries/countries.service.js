@@ -1,5 +1,6 @@
 // src/services/countries/countries.service.js
 const { CountriesService } = require("./countries.class");
+const hooks = require("./hooks");
 
 module.exports = function (app) {
   const knex = app.get("knex");
@@ -12,12 +13,16 @@ module.exports = function (app) {
   };
 
   // Register Feathers CRUD service
-  app.use("/countries", new CountriesService(options));
+  app.use("/api/v1/countries", new CountriesService(options));
+
+  // Register hooks
+  const service = app.service("/api/v1/countries");
+  service.hooks(hooks);
 
   // Custom endpoint for refresh
-  app.get("/countries/refresh", async (req, res, next) => {
+  app.get("/api/v1/countries/refresh", async (req, res, next) => {
     try {
-      const result = await app.service("countries").fetchFromApi();
+      const result = await service.fetchFromApi();
       res.json(result);
     } catch (err) {
       next(err);
