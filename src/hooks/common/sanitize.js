@@ -18,7 +18,7 @@ const hideFields =
     return ctx;
   };
 
-// Αποτρέπουμε αλλαγές σε read-only πεδία (before create/patch)
+// Prevent changes to read-only fields (before create/patch)
 const preventChanging =
   (fields = []) =>
   async (ctx) => {

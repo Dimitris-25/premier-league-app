@@ -1,6 +1,5 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 
-// Μικρό "when" χωρίς έξτρα lib
 const when =
   (predicate, ...hooks) =>
   async (ctx) => {
@@ -9,10 +8,10 @@ const when =
   };
 const isExternal = (ctx) => !!ctx.params.provider;
 
-// JWT μόνο για εξωτερικά calls
+// JWT for outcalls
 const authExternal = () => when(isExternal, authenticate("jwt"));
 
-// Ρόλοι (π.χ. admin)
+// Roles
 const requireRoles =
   (roles = ["admin"], { roleField = "role" } = {}) =>
   async (ctx) => {
@@ -26,7 +25,7 @@ const requireRoles =
     return ctx;
   };
 
-// Ιδιοκτήτης ή admin
+// Admin
 const restrictToOwner =
   ({
     ownerField = "user_id",
@@ -48,7 +47,7 @@ const restrictToOwner =
       throw e;
     }
 
-    // Στο patch/remove υπάρχει id -> ελέγχουμε owner
+    // patch
     if (ctx.id != null) {
       const current = await ctx.service.get(ctx.id, {
         ...ctx.params,
@@ -60,13 +59,13 @@ const restrictToOwner =
         throw e;
       }
     } else {
-      // Σε find, φιλτράρουμε σε owner
+      // admin
       ctx.params.query = { ...(ctx.params.query || {}), [ownerField]: userId };
     }
     return ctx;
   };
 
-// Επιτρέπουμε συγκεκριμένα methods για εξωτερικούς
+// Autorized methos
 const limitExternalMethods =
   (allowed = []) =>
   async (ctx) => {

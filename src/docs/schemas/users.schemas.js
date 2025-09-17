@@ -75,7 +75,7 @@ const UserBase = {
 // API response model (includes readOnly fields)
 const User = {
   allOf: [
-    { $ref: "#/components/schemas/UserBase" },
+    { $ref: "#/docs/schemas/UserBase" },
     {
       type: "object",
       required: ["user_id", "email"],
@@ -98,7 +98,7 @@ const User = {
 // Request body for creating a user (password is write-only)
 const UserCreate = {
   allOf: [
-    { $ref: "#/components/schemas/UserBase" },
+    { $ref: "#/docs/schemas/UserBase" },
     {
       type: "object",
       required: ["email", "password"],
@@ -123,7 +123,7 @@ const UserCreate = {
 // Request body for patching a user (all fields optional)
 const UserPatch = {
   allOf: [
-    { $ref: "#/components/schemas/UserBase" },
+    { $ref: "#/docs/schemas/UserBase" },
     {
       type: "object",
       // No 'required' → all optional
