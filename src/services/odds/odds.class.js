@@ -14,24 +14,71 @@ class OddsService {
     // FK tables (lowercase in your DB)
     this.fixturesTable = this.options.fixturesTable || "fixtures";
     this.leaguesTable = this.options.leaguesTable || "leagues";
-    this.bookmakersTable = this.options.bookmakersTable || "bookmakers"; // <-- NEW
+    this.bookmakersTable = this.options.bookmakersTable || "bookmakers";
   }
 
   // ---------- CRUD ----------
-  async find() {
-    return this.Model(this.table).select("*");
+  // Safe & fast find with limit/sort and basic filters
+  async find(params = {}) {
+    const q = params.query || {};
+    const limit = Math.min(parseInt(q.$limit, 10) || 50, 200); // default 50, cap 200
+
+    // Optional sort: ?$sort[odd]=desc or ?$sort[odd]=asc
+    const sort = q.$sort || {};
+    const sortField = Object.keys(sort)[0] || this.id;
+    const sortDir =
+      sort[sortField] === -1 || String(sort[sortField]).toLowerCase() === "desc"
+        ? "desc"
+        : "asc";
+
+    // Filters
+    const where = {};
+    if (q.fixture_id) where.fixture_id = +q.fixture_id;
+    if (q.league_id) where.league_id = +q.league_id;
+    if (q.bookmaker_id) where.bookmaker_id = +q.bookmaker_id;
+    if (q.bet_id) where.bet_id = +q.bet_id;
+    // value exact match (key of the composite). For partial search use ?value_like=...
+    if (q.value) where.value = String(q.value);
+    const valueLike = q.value_like ? String(q.value_like) : null;
+
+    console.log("[ODDS] find() query:", {
+      where,
+      valueLike,
+      limit,
+      sortField,
+      sortDir,
+    });
+
+    try {
+      const knexQ = this.Model(this.table).select("*");
+
+      if (Object.keys(where).length) knexQ.where(where);
+      if (valueLike) knexQ.andWhere("value", "like", `%${valueLike}%`);
+
+      const rows = await knexQ.orderBy(sortField, sortDir).limit(limit);
+
+      console.log("[ODDS] find() returning rows:", rows.length);
+      return rows;
+    } catch (err) {
+      console.error("[ODDS] find() error:", err.message);
+      throw new Error("Failed to fetch odds from DB: " + err.message);
+    }
   }
+
   async get(id) {
     return this.Model(this.table).where(this.id, id).first();
   }
+
   async create(data) {
     const [pk] = await this.Model(this.table).insert(data);
     return { ...data, [this.id]: pk };
   }
+
   async patch(id, data) {
     await this.Model(this.table).where(this.id, id).update(data);
     return this.get(id);
   }
+
   async remove(id) {
     await this.Model(this.table).where(this.id, id).del();
     return { id };
@@ -45,6 +92,7 @@ class OddsService {
         ? +v
         : null;
   }
+
   toNum(v) {
     const n = parseFloat(v);
     return Number.isFinite(n) ? n : null;
@@ -58,6 +106,7 @@ class OddsService {
       .first();
     return r?.fixture_id ?? null;
   }
+
   async getLeagueIdByApi(api_league_id) {
     if (!api_league_id) return null;
     const r = await this.Model(this.leaguesTable)
@@ -66,7 +115,8 @@ class OddsService {
       .first();
     return r?.league_id ?? null;
   }
-  // NEW: map API bookmaker id -> local bookmaker_id
+
+  // Map API bookmaker id -> local bookmaker_id
   async getBookmakerIdByApi(api_bookmaker_id) {
     if (!api_bookmaker_id) return null;
     const r = await this.Model(this.bookmakersTable)
@@ -106,11 +156,13 @@ class OddsService {
       bet_id: row.bet_id,
       value: row.value,
     };
+
     const existing = await this.Model(this.table)
       .transacting(trx)
       .select(this.id)
       .where(where)
       .first();
+
     if (existing?.[this.id]) {
       await this.Model(this.table).transacting(trx).where(where).update({
         bookmaker_name: row.bookmaker_name,
@@ -120,11 +172,12 @@ class OddsService {
       });
       return { action: "updated", id: existing[this.id] };
     }
+
     const [pk] = await this.Model(this.table).transacting(trx).insert(row);
     return { action: "created", id: pk };
   }
 
-  // Fetch from API
+  // ---------- Fetch from API-Football ----------
   async fetchFromApi() {
     const { API_KEY } = process.env;
     if (!API_KEY) throw new Error("API_KEY is not set");
@@ -138,13 +191,17 @@ class OddsService {
       timeout: 30000,
     });
 
-    let page = 1,
-      totalPages = 1;
-    let created = 0,
-      updated = 0,
-      missed_fk = 0,
-      failed = 0;
+    let page = 1;
+    let totalPages = 1;
+    let created = 0;
+    let updated = 0;
+    let missed_fk = 0;
+    let failed = 0;
     const sample_errors = [];
+
+    console.log(
+      `[ODDS] Fetching from API-Football league=${league} season=${season}`
+    );
 
     do {
       const { data } = await client.get("/odds", {
@@ -153,6 +210,8 @@ class OddsService {
       const items = Array.isArray(data?.response) ? data.response : [];
       const paging = data?.paging || {};
       totalPages = this.toInt(paging?.total) || 1;
+
+      console.log(`[ODDS] page ${page}/${totalPages} | items: ${items.length}`);
 
       await this.Model.transaction(async (trx) => {
         for (const item of items) {
@@ -199,8 +258,9 @@ class OddsService {
             }
           } catch (e) {
             failed++;
-            if (sample_errors.length < 5)
+            if (sample_errors.length < 5) {
               sample_errors.push(e?.sqlMessage || e?.message || String(e));
+            }
           }
         }
       });
@@ -208,7 +268,7 @@ class OddsService {
       page++;
     } while (page <= totalPages);
 
-    return {
+    const result = {
       ok: true,
       params: { league, season },
       pages: totalPages,
@@ -218,6 +278,8 @@ class OddsService {
       failed,
       sample_errors,
     };
+    console.log("[ODDS] Sync complete:", result);
+    return result;
   }
 }
 

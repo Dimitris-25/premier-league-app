@@ -11,28 +11,38 @@ module.exports = function (app) {
     id: "odd_id",
     fixturesTable: "fixtures",
     leaguesTable: "leagues",
-    bookmakersTable: "bookmakers", // <-- pass mapping table
+    bookmakersTable: "bookmakers",
   };
 
   const service = new OddsService(options);
-  app.use("/odds", service);
 
-  const oddsService = app.service("odds");
+  // Service mount
+  app.use("/api/v1/odds", service);
+
+  // Prefer Feathers-style lookup (χωρίς leading slash)
+  const oddsService = app.service("api/v1/odds");
   oddsService.hooks(hooks);
 
-  (async () => {
-    try {
-      console.log("🎲 Fetching odds from API-Football...");
-      const result = await service.fetchFromApi();
-      console.log("✅ Odds sync complete:", result);
-    } catch (err) {
-      console.error("❌ Failed to fetch odds:", err.message);
-    }
-  })();
+  // Optional auto-sync on startup (guarded by env)
+  if ((process.env.AUTO_SYNC_ODDS || "true").toLowerCase() === "true") {
+    (async () => {
+      try {
+        console.log("🎲 Fetching odds from API-Football...");
+        const result = await service.fetchFromApi();
+        console.log("✅ Odds sync complete:", result);
+      } catch (err) {
+        console.error("❌ Failed to fetch odds:", err.message);
+      }
+    })();
+  }
 
-  app.use("/odds/refresh", {
+  // Manual refresh endpoint (read-only)
+  app.use("/api/v1/odds/refresh", {
     async find() {
       return service.fetchFromApi();
     },
   });
+
+  console.log("[SERVICE] /api/v1/odds registered");
+  console.log("[SERVICE] /api/v1/odds/refresh registered");
 };
