@@ -1,20 +1,20 @@
 // src/docs/paths/login.path.js
 // OpenAPI paths for the "login" flows (always exposed)
 
-const LoginRequest = { $ref: "#/components/schemas/LoginRequest" };
-const AuthTokenResponse = { $ref: "#/components/schemas/AuthTokenResponse" };
-const ErrorResponse = { $ref: "#/components/schemas/ErrorResponse" };
-const TestTokenResponse = { $ref: "#/components/schemas/TestTokenResponse" };
+const LoginRequest = { $ref: "#/docs/schemas/LoginRequest" };
+const AuthTokenResponse = { $ref: "#/docs/schemas/AuthTokenResponse" };
+const ErrorResponse = { $ref: "#/docs/schemas/ErrorResponse" };
+const TestTokenResponse = { $ref: "#/docs/schemas/TestTokenResponse" };
 const PasswordResetRequest = {
-  $ref: "#/components/schemas/PasswordResetRequest",
+  $ref: "#/docs/schemas/PasswordResetRequest",
 };
 const PasswordRecoveryResponse = {
-  $ref: "#/components/schemas/PasswordRecoveryResponse",
+  $ref: "#/docs/schemas/PasswordRecoveryResponse",
 };
 const TokenValidityResponse = {
-  $ref: "#/components/schemas/TokenValidityResponse",
+  $ref: "#/docs/schemas/TokenValidityResponse",
 };
-const MessageResponse = { $ref: "#/components/schemas/MessageResponse" };
+const MessageResponse = { $ref: "#/docs/schemas/MessageResponse" };
 
 module.exports = {
   "/api/v1/login/access-token": {
@@ -65,6 +65,24 @@ module.exports = {
         401: {
           description: "Missing or invalid token",
           content: { "application/json": { schema: ErrorResponse } },
+        },
+      },
+    },
+  },
+
+  ["/api/v1/login/google"]: {
+    get: {
+      tags: ["login"],
+      summary: "Login with Google (redirect)",
+      description:
+        "Starts the Google OAuth flow. If Google OAuth is not configured, returns 501.",
+      operationId: "login_google",
+      responses: {
+        302: {
+          description: "Redirect to Google OAuth consent page",
+        },
+        501: {
+          description: "Google OAuth is not configured on the server",
         },
       },
     },
