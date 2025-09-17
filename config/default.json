@@ -3,11 +3,22 @@
     "secret": "${JWT_SECRET}",
     "entity": "user",
     "service": "users",
-    "authStrategies": ["jwt", "local"],
+    "authStrategies": ["jwt", "local", "oauth"],
     "jwtOptions": { "expiresIn": "1d" },
-    "local": { "usernameField": "email", "passwordField": "password" }
+    "local": {
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "oauth": {
+      "redirect": "/",
+      "google": {
+        "key": "${GOOGLE_CLIENT_ID}",
+        "secret": "${GOOGLE_CLIENT_SECRET}",
+        "scope": ["openid", "email", "profile"],
+        "callback": "/oauth/google/callback"
+      }
+    }
   },
-
   "seedVenuesOnBoot": false,
   "port": 3030
 }
