@@ -1,11 +1,15 @@
+// swagger/index.js (ή όπου κάνεις το setup των docs)
+
 const swaggerUi = require("swagger-ui-express");
+const { safeSanitizeOpenApi } = require("../hooks/common/sanitanize-swagger");
 const securitySchemes = require("./security");
 
-// env flag
+// Feature flags
 const EXPOSE_WRITES =
   (process.env.EXPOSE_WRITES || "false").toLowerCase() === "true";
+const USE_SANITIZER = (process.env.SANITIZE_SWAGGER_REFS || "1") === "1";
 
-// Paths
+// ---------------- Paths ----------------
 const usersPaths = require("./paths/users.path");
 const loginPaths = require("./paths/login.path");
 const venuesPaths = require("./paths/venues.path")(EXPOSE_WRITES);
@@ -37,7 +41,8 @@ const bookmakersPaths = require("./paths/bookmakers.path")(EXPOSE_WRITES);
 const betsPaths = require("./paths/bets.paths")(EXPOSE_WRITES);
 const leaguesPaths = require("./paths/leagues.paths")(EXPOSE_WRITES);
 
-// Schemas
+// ---------------- Schemas ----------------
+// (τα modules αυτά πρέπει να exportάρουν αντικείμενα { MySchemaName: { ... }, ... })
 const userSchemas = require("./schemas/users.schemas");
 const authSchemas = require("./schemas/auth.schemas");
 const venueSchemas = require("./schemas/venues.schemas");
@@ -56,14 +61,38 @@ const coachesSchemas = require("./schemas/coaches.schemas");
 const citiesSchemas = require("./schemas/cities.schemas");
 const bookmakersSchemas = require("./schemas/bookmakers.schemas");
 const betsSchemas = require("./schemas/bets.schemas");
-const leaguesSchemas = require("./schemas/leaguesSchemas");
+const leaguesSchemas = require("./schemas/leaguesSchemas"); // αν αυτό είναι το σωστό path/όνομα
 
 module.exports = (app) => {
   const PORT = process.env.PORT || 3030;
   const SERVER_URL =
     process.env.SWAGGER_SERVER_URL || `http://localhost:${PORT}`;
 
-  const openapi = {
+  // ΌΛΑ τα schemas σε ΕΝΑ object (θα μπουν σε components.schemas)
+  const RAW_SCHEMAS = {
+    ...userSchemas,
+    ...authSchemas,
+    ...venueSchemas,
+    ...transfersSchemas,
+    ...teamsStatsSchemas,
+    ...teamsInfoSchemas,
+    ...seasonsSchemas,
+    ...playersTopStatsSchemas,
+    ...playersSeasonsStatsSchemas,
+    ...playersProfilesSchemas,
+    ...oddsSchemas,
+    ...fixturesLineupsSchemas,
+    ...eventsSchemas,
+    ...countriesSchemas,
+    ...coachesSchemas,
+    ...citiesSchemas,
+    ...bookmakersSchemas,
+    ...betsSchemas,
+    ...leaguesSchemas,
+  };
+
+  // === RAW OpenAPI doc (χωρίς λάθος 'docs.schemas') ===
+  const rawDoc = {
     openapi: "3.0.3",
     info: { title: "Premier League API", version: "1.0.0" },
     servers: [{ url: SERVER_URL }],
@@ -94,32 +123,9 @@ module.exports = (app) => {
       { name: "bets", description: "All bets props" },
       { name: "leagues", description: "All leagues" },
     ],
-
     components: {
-      securitySchemes,
-    },
-    docs: {
-      schemas: {
-        ...userSchemas,
-        ...authSchemas,
-        ...venueSchemas,
-        ...transfersSchemas,
-        ...teamsStatsSchemas,
-        ...teamsInfoSchemas,
-        ...seasonsSchemas,
-        ...playersTopStatsSchemas,
-        ...playersSeasonsStatsSchemas,
-        ...playersProfilesSchemas,
-        ...oddsSchemas,
-        ...fixturesLineupsSchemas,
-        ...eventsSchemas,
-        ...countriesSchemas,
-        ...coachesSchemas,
-        ...citiesSchemas,
-        ...bookmakersSchemas,
-        ...betsSchemas,
-        ...leaguesSchemas,
-      },
+      securitySchemes, // ✅ σωστή θέση
+      schemas: RAW_SCHEMAS, // ✅ ΟΛΑ τα schemas εδώ
     },
     security: [{ bearer: [] }],
     paths: {
@@ -145,14 +151,21 @@ module.exports = (app) => {
     },
   };
 
-  app.get("/openapi.json", (_req, res) => res.json(openapi));
+  // Προαιρετικά: μετατροπή όλων των κακών $ref ("/docs/schemas/...") σε "#/components/schemas/..."
+  const swaggerDoc = USE_SANITIZER ? safeSanitizeOpenApi(rawDoc) : rawDoc;
+
+  // RAW JSON endpoint
+  app.get("/openapi.json", (_req, res) => res.json(swaggerDoc));
+
+  // Swagger UI
   app.use(
     "/docs",
     swaggerUi.serve,
-    swaggerUi.setup(openapi, {
+    swaggerUi.setup(swaggerDoc, {
       swaggerOptions: { defaultModelsExpandDepth: -1 },
     })
   );
-  // console.log("[DOCS] Schemas loaded:", Object.keys(openapi.docs.schemas));
-  // console.log("[DOCS] Paths loaded:", Object.keys(openapi.paths));
+
+  console.log("[DOCS] Schemas:", Object.keys(swaggerDoc.docs.schemas).length);
+  console.log("[DOCS] Paths:", Object.keys(swaggerDoc.paths).length);
 };
