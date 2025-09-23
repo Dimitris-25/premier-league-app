@@ -6,75 +6,105 @@ require("dotenv").config();
 const configuration = require("@feathersjs/configuration");
 const { knexClient } = require("./db/knex");
 const middleware = require("./middleware");
-const setupSwagger = require("./docs/swagger"); // Curated OpenAPI
+const setupSwagger = require("./docs/swagger");
 const services = require("./services");
-const authentication = require("./authentication"); // Feathers auth service
-const authRoutes = require("./routes/auth"); // Custom /api/v1/login/*
+const authentication = require("./authentication");
+const authRoutes = require("./routes/auth");
 const logger = require("./logger");
+
+// 🔹 CORS
+const cors = require("cors");
 
 const app = express(feathers());
 
 // ------------------------------------------------------------------
-// Load config files (.env, default.json, production.json, ...)
+// Load configuration
 // ------------------------------------------------------------------
 app.configure(configuration());
 
 // ------------------------------------------------------------------
-// Ensure host / port / protocol are set EARLY (used by OAuth to build URLs)
-// Host must be hostname ONLY (no schema, no port) to avoid ":3030:3030"
+// Host / Port / Protocol
 // ------------------------------------------------------------------
 const port = Number(process.env.PORT || app.get("port") || 3030);
 app.set("port", port);
-app.set("host", process.env.HOSTNAME || "localhost"); // <-- hostname only
-app.set("protocol", (process.env.PROTOCOL || "http").replace(":", "")); // "http"
-
+app.set("host", process.env.HOSTNAME || "localhost");
+app.set("protocol", (process.env.PROTOCOL || "http").replace(":", ""));
 logger.info(`App host set to ${app.get("host")} (port ${app.get("port")})`);
 
 // ------------------------------------------------------------------
-// Body parsers (must come before rest/services so JSON is parsed)
+// Body parsers
 // ------------------------------------------------------------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ------------------------------------------------------------------
-// Feathers REST transport
+// CORS (must be BEFORE services/routes)
+// ------------------------------------------------------------------
+const ALLOWED_ORIGINS = [
+  "http://localhost:3030", // Swagger UI
+  "http://localhost:5173", // Vite (variant)
+  "http://localhost:5174", // Vite (variant)
+  "http://localhost:5175", // ✅ Vite (τρέχεις εδώ)
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5174",
+  "http://127.0.0.1:5175",
+];
+
+const corsOptions = {
+  origin(origin, cb) {
+    // επιτρέπει Postman/cURL (no origin)
+    if (!origin) return cb(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    return cb(new Error(`Not allowed by CORS: ${origin}`));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  credentials: false,
+};
+
+app.use(cors(corsOptions));
+// preflight
+app.options("*", cors(corsOptions));
+
+// ------------------------------------------------------------------
+// Feathers REST
 // ------------------------------------------------------------------
 app.configure(express.rest());
 
 // ------------------------------------------------------------------
-// DB handles (knex available via app.get('knex'))
+// DB handles
 // ------------------------------------------------------------------
 app.set("knex", knexClient);
 app.set("knexClient", knexClient);
 app.set("mysqlClient", knexClient);
 
 // ------------------------------------------------------------------
-// PRE middlewares (cors/helmet/rate-limit etc.)
+// PRE middlewares (helmet, rate-limit, κλπ.)
 // ------------------------------------------------------------------
 app.configure(middleware.pre);
 
 // ------------------------------------------------------------------
-// Swagger (UI at /docs, JSON at /openapi.json)
+// Swagger
 // ------------------------------------------------------------------
 app.configure(setupSwagger);
 
 // ------------------------------------------------------------------
-// Services (users before auth so strategies can resolve entities)
+// Services
 // ------------------------------------------------------------------
 app.configure(services);
 
 // ------------------------------------------------------------------
-// Authentication (depends on users service)
+// Authentication
 // ------------------------------------------------------------------
 app.configure(authentication);
 
 // ------------------------------------------------------------------
-// Custom login routes (/api/v1/login/*, google wrapper, etc.)
+// Custom login routes (/api/v1/login/*)
 // ------------------------------------------------------------------
 app.configure(authRoutes);
 
 // ------------------------------------------------------------------
-// After successful auth: update last_login & never leak password_hash
+// Auth hooks (last_login + hide password)
 // ------------------------------------------------------------------
 const setLastLogin = async (context) => {
   const { app, result } = context;
@@ -88,11 +118,8 @@ const setLastLogin = async (context) => {
   if (context.result?.user) delete context.result.user.password_hash;
   return context;
 };
-
 if (app.service("authentication")) {
-  app.service("authentication").hooks({
-    after: { create: [setLastLogin] },
-  });
+  app.service("authentication").hooks({ after: { create: [setLastLogin] } });
 }
 
 // ------------------------------------------------------------------
@@ -101,7 +128,7 @@ if (app.service("authentication")) {
 app.get("/", (_req, res) => res.json({ message: "Feathers app is running" }));
 
 // ------------------------------------------------------------------
-// POST middlewares (404 + global error handler)
+// POST middlewares (404/error handler)
 // ------------------------------------------------------------------
 app.configure(middleware.post);
 

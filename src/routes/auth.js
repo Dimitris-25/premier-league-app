@@ -5,14 +5,14 @@
 const express = require("express");
 const { authenticate } = require("@feathersjs/express"); // Feathers JWT guard
 
-// Controllers
 const {
   loginAccessToken,
   testToken,
   passwordRecovery,
-  resetPassword,
   checkResetToken,
-  loginGoogle, // <-- added
+  resetPassword,
+  loginGoogleIdToken, // ✅ νέο (GIS flow)
+  loginGoogle, // ✅ κρατάμε και το redirect flow αν υπάρχει στον controller
 } = require("../controllers/auth.controller");
 
 // Rate limiters
@@ -33,10 +33,14 @@ const {
 module.exports = (app) => {
   const router = express.Router();
 
-  // Google login (redirect wrapper) via controller
+  // --- Google login ---
+  // 1) Redirect flow (παλιό, αν το χρησιμοποιείς ακόμη)
   router.get("/api/v1/login/google", loginGoogle);
 
-  // Public endpoints (no JWT required)
+  // 2) GIS ID Token flow (React -> idToken)
+  router.post("/api/v1/login/google-id", loginLimiter, loginGoogleIdToken);
+
+  // --- Public endpoints (no JWT required) ---
   router.post(
     "/api/v1/login/access-token",
     loginLimiter,
@@ -58,8 +62,6 @@ module.exports = (app) => {
     resetPassword
   );
 
-  router.get("/api/v1/login/google", loginGoogle);
-
   router.get(
     "/api/v1/reset-password/:token",
     resetLimiter,
@@ -67,7 +69,7 @@ module.exports = (app) => {
     checkResetToken
   );
 
-  // Protected endpoint (requires Bearer JWT)
+  // --- Protected (requires Bearer JWT) ---
   router.post("/api/v1/login/test-token", authenticate("jwt"), testToken);
 
   app.use(router);
